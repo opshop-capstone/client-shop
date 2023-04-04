@@ -1,13 +1,14 @@
-import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
-
+import { ThemeProvider } from "styled-components/native";
+import { theme } from "./theme";
+import Navigation from "./navigation";
 export default function App() {
-  console.log("y");
   return (
-    <View style={styles.container}>
-      <Text>OPSHOP!!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ThemeProvider theme={theme}>
+      <StatusBar backgroundColor={theme.background} barStyle="dark-content" />
+      <Navigation />
+    </ThemeProvider>
   );
 }
 
