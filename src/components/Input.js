@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState, forwardRef } from "react";
+import styled from "styled-components/native";
 import PropTypes from "prop-types";
 
 const Container = styled.View`
@@ -12,7 +12,8 @@ const Label = styled.Text`
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 6px;
-  color: ${({ theme }) => theme.inputLabel};
+  color: ${({ theme, isFocused }) =>
+    isFocused ? theme.text : theme.inputLabel};
 `;
 
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
@@ -22,34 +23,61 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   color: ${({ theme }) => theme.text};
   padding: 20px 10px;
   font-size: 16px;
-  border: 1px solid;
+  border: ${({ theme, isFocused }) =>
+    isFocused ? theme.text : theme.inputBorder};
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  border-bottom-width: 1px;
   border-radius: 4px;
 `;
 
-const Input = ({
-  label,
-  value,
-  onChangeText,
-  onSubmitEditing,
-  onBlur,
-  placeholder,
-  returnKeyType,
-  maxLength,
-}) => {
-  return (
-    <Container>
-      <Label>{label}</Label>
-      <StyledInput
-        value={value}
-        onChangeText={onChangeText}
-        onSubmitEditing={onSubmitEditing}
-        onBlur={onBlur}
-        placeholder={placeholder}
-        returnKeyType={returnKeyType}
-        maxLength={maxLength}
-      />
-    </Container>
-  );
-};
+const Input = forwardRef(
+  (
+    {
+      label,
+      value,
+      onChangeText,
+      onSubmitEditing,
+      onBlur,
+      placeholder,
+      returnKeyType,
+      maxLength,
+      isPassword,
+    },
+    ref
+  ) => {
+    const [isFocused, setIsFocused] = useState(0);
+    return (
+      <Container>
+        <Label isFocused={isFocused}>{label}</Label>
+        <StyledInput
+          ref={ref}
+          value={value}
+          onChangeText={onChangeText}
+          onSubmitEditing={onSubmitEditing}
+          onBlur={() => {
+            setIsFocused(false);
+            onBlur();
+          }}
+          placeholder={placeholder}
+          returnKeyType={returnKeyType}
+          maxLength={maxLength}
+          autoCapitalize="none"
+          autoCorrect={false}
+          textContentType="none"
+          isFocused={isFocused}
+          onFocus={() => {
+            setIsFocused(true);
+          }}
+          secureTextEntry={isPassword}
+        />
+      </Container>
+    );
+  }
+);
 
+Input.defaultProps = {
+  onBlur: () => {},
+};
 export default Input;

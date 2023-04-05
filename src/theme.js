@@ -3,7 +3,7 @@ const Colors = {
   black: "#111111",
   main: "#111111",
   grey_0: "#d5d5d5",
-  grey_1: "#",
+  grey_1: "#a6a6a6",
 };
 
 export const theme = {
@@ -20,4 +20,8 @@ export const theme = {
   inputLabel: Colors.grey_1,
   inputPlaceholder: Colors.grey_1,
   inputBorder: Colors.grey_1,
+
+  //Tab
+  tabBtnActive: Colors.main,
+  tabBtnInactive: Colors.grey_1,
 };
