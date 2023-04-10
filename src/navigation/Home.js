@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { OpMain, Profile } from "../screens";
+import { OpMain, Profile, Cart, Category } from "../screens";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -30,7 +30,7 @@ const Home = () => {
       />
       <Tab.Screen
         name="   "
-        component={OpMain}
+        component={Category}
         options={{
           tabBarIcon: ({ focused }) =>
             TabIcon({ name: focused ? "apps" : "apps-outline", focused }),
@@ -38,7 +38,7 @@ const Home = () => {
       />
       <Tab.Screen
         name="    "
-        component={OpMain}
+        component={Cart}
         options={{
           tabBarIcon: ({ focused }) =>
             TabIcon({ name: focused ? "cart" : "cart-outline", focused }),

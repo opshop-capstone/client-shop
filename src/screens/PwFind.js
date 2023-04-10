@@ -36,7 +36,7 @@ const PwFind = ({ navigation }) => {
       <Input label="휴대전화" />
 
       <Button
-        title="비밀번호 찾기"
+        title="인증번호 전송"
         onPress={() => {
           navigation.navigate("회원가입");
         }}

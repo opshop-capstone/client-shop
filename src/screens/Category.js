@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Image } from "../components";
+
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
@@ -10,12 +10,12 @@ const StyledText = styled.Text`
   font-size: 30px;
 `;
 
-const OpMain = () => {
+const Category = () => {
   return (
     <Container>
-      <Image url="https://ifh.cc/g/M2TJZp.png" />
+      <StyledText>카테고리 별로 분류하기</StyledText>
     </Container>
   );
 };
 
-export default OpMain;
+export default Category;

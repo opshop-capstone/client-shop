@@ -1,15 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Button, Image, Input } from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { UserContext } from "../contexts";
 
 const Container = styled.View`
-flex : 1;
-justify-content : center;
-align-items : center;
-background - color: ${({ theme }) => theme.background} ;
-padding : 50px 20px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.background};
+  padding: 50px 20px;
 `;
 
 const StyledText = styled.Text`
@@ -20,6 +21,7 @@ const StyledText = styled.Text`
 `;
 
 const Signup = ({ navigation }) => {
+  const { setUser } = useContext(UserContext);
   const insets = useSafeAreaInsets();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");

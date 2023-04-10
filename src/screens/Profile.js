@@ -24,6 +24,7 @@ const Profile = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   return (
     <Container>
+      <StyledText>마이페이지</StyledText>
       <Button title="로그아웃" onPress={() => setUser({})} />
     </Container>
   );
