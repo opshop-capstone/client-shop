@@ -4,6 +4,7 @@ import { ThemeProvider } from "styled-components/native";
 import { theme } from "./theme";
 import Navigation from "./navigation";
 import { UserProvider } from "./contexts";
+
 export default function App() {
   return (
     <ThemeProvider theme={theme}>

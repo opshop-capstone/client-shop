@@ -6,10 +6,11 @@ const UserContext = createContext({
 });
 
 const UserProvider = ({ children }) => {
-  const [user, setUserInfo] = useState({});
-  const setUser = ({ uid }) => {
-    setUserInfo({ uid });
-  };
+  const [user, setUser] = useState("");
+  // setUserInfo -> setUser로 바꾸고 밑에 주석
+  // const setUser = ({ uid }) => {
+  //   setUserInfo({ uid });
+  // };
   const value = { user, setUser };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };

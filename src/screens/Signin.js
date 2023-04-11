@@ -6,13 +6,13 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { UserContext } from "../contexts";
 
 const Container = styled.View`
-flex : 1;
-justify-content : center;
-align-items : center;
-background - color: ${({ theme }) => theme.background} ;
-padding : 20px 20px;
-padding-top : ${({ insets: { top } }) => top}px
-padding-bottom : ${({ insets: { bottom } }) => bottom}px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.background};
+  padding: 20px 20px;
+  padding-top: ${({ insets: { top } }) => top}px;
+  padding-bottom: ${({ insets: { bottom } }) => bottom}px;
 `;
 
 const StyledText = styled.Text`
@@ -24,15 +24,21 @@ const StyledText = styled.Text`
 
 const Signin = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const refPassword = useRef(null);
 
-  const _handleSigninBtnPress = () => {
-    const user = "aaa";
-    setUser(user);
-    console.log("로그인");
+  const { setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+
+  const _handleSigninBtnPress = async () => {
+    try {
+      setUser(123);
+      console.log(user.uid);
+      console.log("로그인");
+    } catch (e) {
+      alert("로그인 에러", e.message);
+    }
   };
   return (
     <KeyboardAwareScrollView>

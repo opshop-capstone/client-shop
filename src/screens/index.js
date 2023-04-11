@@ -5,5 +5,6 @@ import Profile from "./Profile";
 import OpMain from "./OpMain";
 import Category from "./Category";
 import Cart from "./Cart";
+import PopularShop from "./PopularShop";
 
-export { Signin, Signup, PwFind, Profile, OpMain, Category, Cart };
+export { Signin, Signup, PwFind, Profile, OpMain, Category, Cart, PopularShop };
