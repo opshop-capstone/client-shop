@@ -5,5 +5,6 @@ import Input from "./Input";
 import IconButton from "./IconButton";
 import ItemCard from "./ItemCard";
 import CustomButton from "./CustomButton";
+import ShopCard from "./ShopCard";
 
-export { Button, Image, Input, IconButton, ItemCard, CustomButton };
+export { Button, Image, Input, IconButton, ItemCard, CustomButton, ShopCard };

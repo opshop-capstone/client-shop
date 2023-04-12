@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Profile, OpMain, PopularShop } from "../screens";
+import { Profile, OpMain, PopularShop, Shop, Goods } from "../screens";
 import { Image, IconButton } from "../components";
 import Home from "./Home";
 import { Button } from "react-native";
@@ -51,6 +51,36 @@ const Main = () => {
         options={{
           title: "Main",
           headerTitle: () => <LogoTitle />,
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Shop"
+        component={Shop}
+        options={{
+          title: "Main",
+          headerTitle: "VINTAGE TALK",
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Goods"
+        component={Goods}
+        options={{
+          title: "Main",
+          headerTitle: "VINTAGE TALK",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />

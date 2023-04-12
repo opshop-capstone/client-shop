@@ -71,15 +71,19 @@ const Signin = ({ navigation }) => {
           isPassword={true}
         />
         <Button
-          title="비밀번호를 잊으셨나요?"
+          title="비회원으로 둘러보기"
           onPress={() => {
-            navigation.navigate("비밀번호찾기");
+            _handleSigninBtnPress();
           }}
           containerStyle={{
             marginTop: 0,
             backgroundColor: "#fff",
           }}
-          textStyle={{ color: "#5d5d5d", fontSize: 20 }}
+          textStyle={{
+            color: "#5d5d5d",
+            fontSize: 20,
+            textDecorationLine: "underline",
+          }}
         />
         <Button
           title="로그인"
@@ -87,6 +91,7 @@ const Signin = ({ navigation }) => {
             _handleSigninBtnPress();
           }}
         />
+
         <Button
           title="회원가입"
           onPress={() => {
@@ -97,6 +102,17 @@ const Signin = ({ navigation }) => {
             backgroundColor: "#fff",
           }}
           textStyle={{ color: "#111" }}
+        />
+        <Button
+          title="비밀번호를 잊으셨나요?"
+          onPress={() => {
+            navigation.navigate("비밀번호찾기");
+          }}
+          containerStyle={{
+            marginTop: 0,
+            backgroundColor: "#fff",
+          }}
+          textStyle={{ color: "#5d5d5d", fontSize: 20 }}
         />
       </Container>
     </KeyboardAwareScrollView>

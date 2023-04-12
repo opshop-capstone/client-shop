@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../contexts";
-import { Button, CustomButton, Image, Input, ShopCard } from "../components";
+import { Button, CustomButton, ItemCard, ShopCard } from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView } from "react-native";
@@ -12,9 +12,10 @@ const Container = styled.View`
 `;
 
 const StyledText = styled.Text`
-  font-size: 30px;
+  margin: 20px;
+  font-size: 20px;
   color: #111;
-  font-weight: 600;
+  font-weight: bold;
   margin-bottom: 15px;
 `;
 
@@ -34,33 +35,50 @@ const LowContainer = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
-const PopularShop = ({ navigation }) => {
+
+const ItemContainer = styled.View`
+  margin: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  flex-wrap: wrap;
+`;
+const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   return (
     <Container>
       <ScrollView>
-        <BoxContainer>
-          <LowContainer>
-            {[
-              { name: "flame", title: "인기상점" },
-              { name: "heart", title: "찜한상품" },
-              { name: "location", title: "지역별" },
-              { name: "apps", title: "카테고리" },
-              { name: "star", title: "인기상품" },
-            ].map((a, i) => {
-              return (
-                <CustomButton
-                  onPress={() => {
-                    navigation.navigate("PopularShop");
-                  }}
-                  iconName={a.name}
-                  title={a.title}
-                />
-              );
-            })}
-          </LowContainer>
-        </BoxContainer>
-        <Contour />
+        <ScrollView
+          contentContainerStyle={{
+            margin: 25,
+            flexDirection: "row",
+            overflow: "auto",
+
+            justifyContent: "space-between",
+            alignItems: "center",
+            flex: 1,
+          }}
+          horizontal={true}
+        >
+          {[
+            { name: "thumbs-up", title: "인기상품" },
+            { name: "shirt", title: "부위별" },
+            { name: "color-wand", title: "신상품" },
+            { name: "ios-copy", title: "브랜드별" },
+            { name: "ios-glasses", title: "패션잡화" },
+          ].map((a, i) => {
+            return (
+              <CustomButton
+                onPress={() => {
+                  navigation.navigate("PopularShop");
+                }}
+                iconName={a.name}
+                title={a.title}
+              />
+            );
+          })}
+        </ScrollView>
         <ShopCard
           onPress={() => {
             navigation.navigate("Shop");
@@ -69,18 +87,30 @@ const PopularShop = ({ navigation }) => {
           title="VINTAGE TALK"
           description="서울시 성북구 석관동 58-283 성북A 터미널 SH로지스 빈티지톡 수입 구제샵, 명품 브랜드 빈티지샵 쇼핑몰"
         />
-        {[1, 2, 3, 4, 5, 6].map(() => {
-          return (
-            <ShopCard
-              image="https://ifh.cc/g/M2TJZp.png"
-              title="상점명"
-              description="description"
-            />
-          );
-        })}
+        <Contour />
+        <StyledText>매장 인기 상품</StyledText>
+        <ItemContainer>
+          <ItemCard
+            onPress={() => {
+              navigation.navigate("Goods");
+            }}
+            url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
+          />
+
+          {[1, 2, 3, 4, 5, 6].map(() => {
+            return (
+              <ItemCard
+                onPress={() => {
+                  navigation.navigate("Goods");
+                }}
+                url="https://ifh.cc/g/M2TJZp.png"
+              />
+            );
+          })}
+        </ItemContainer>
       </ScrollView>
     </Container>
   );
 };
 
-export default PopularShop;
+export default Shop;

@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useContext } from "react";
+import styled, { ThemeContext } from "styled-components";
 import { FlatList } from "react-native";
 import { Image, IconButton, ItemCard, CustomButton } from "../components";
 import { SliderBox } from "react-native-image-slider-box";
@@ -17,7 +17,11 @@ const BoxContainer = styled.View`
   margin: 5px;
   background-color: ${({ theme }) => theme.background};
 `;
-
+const Contour = styled.View`
+  border-bottom-width: 2px;
+  border-color: ${({ theme }) => theme.imgBackground};
+  margin: 6px;
+`;
 const LowContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
@@ -46,6 +50,8 @@ const sliderTouch = (index) => {
 };
 
 const OpMain = ({ navigation }) => {
+  const theme = useContext(ThemeContext);
+
   return (
     <Container>
       <ScrollView>
@@ -65,52 +71,45 @@ const OpMain = ({ navigation }) => {
         />
         <BoxContainer>
           <LowContainer>
-            <CustomButton
-              onPress={() => {
-                navigation.navigate("PopularShop");
-              }}
-              iconName="flame"
-              title="인기상점"
-            />
-            <CustomButton
-              onPress={() => {
-                alert("dd");
-              }}
-              iconName="heart"
-              title="찜한상품"
-            />
-            <CustomButton
-              onPress={() => {
-                alert("dd");
-              }}
-              iconName="location"
-              title="지역별"
-            />
-            <CustomButton
-              onPress={() => {
-                alert("dd");
-              }}
-              iconName="apps"
-              title="카테고리"
-            />
-            <CustomButton
-              onPress={() => {
-                alert("dd");
-              }}
-              iconName="star"
-              title="인기상품"
-            />
+            {[
+              { name: "flame", title: "인기상점" },
+              { name: "heart", title: "찜한상품" },
+              { name: "location", title: "지역별" },
+              { name: "apps", title: "카테고리" },
+              { name: "star", title: "인기상품" },
+            ].map((a, i) => {
+              return (
+                <CustomButton
+                  onPress={() => {
+                    navigation.navigate("PopularShop");
+                  }}
+                  iconName={a.name}
+                  title={a.title}
+                />
+              );
+            })}
           </LowContainer>
         </BoxContainer>
-
+        <Contour />
         <BoxContainer>
           <StyledText>박상호님을 위한 맞춤 Pick!</StyledText>
           <ItemContainer>
-            <ItemCard url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG" />
-            <ItemCard url="https://ifh.cc/g/M2TJZp.png" />
-            <ItemCard url="https://ifh.cc/g/M2TJZp.png" />
-            <ItemCard url="https://ifh.cc/g/M2TJZp.png" />
-            <ItemCard url="https://ifh.cc/g/M2TJZp.png" />
+            <ItemCard
+              onPress={() => {
+                navigation.navigate("Goods");
+              }}
+              url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
+            />
+            {[1, 2, 3, 4, 5, 6].map(() => {
+              return (
+                <ItemCard
+                  url="https://ifh.cc/g/M2TJZp.png"
+                  onPress={() => {
+                    navigation.navigate("Goods");
+                  }}
+                />
+              );
+            })}
           </ItemContainer>
         </BoxContainer>
       </ScrollView>
