@@ -7,7 +7,6 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.btnBackground};
   padding: 10px;
   margin: 10px 0;
-  flex: 1;
   justify-content: center;
   align-items: center;
   border-radius: 4px;
@@ -18,7 +17,7 @@ const Title = styled.Text`
   color: ${({ theme }) => theme.btnTitle};
 `;
 
-const Button = ({ title, onPress, containerStyle, textStyle }) => {
+const ButtonNoFlex = ({ title, onPress, containerStyle, textStyle }) => {
   return (
     <TouchableOpacity onPress={onPress} style={{ flexDirection: "row" }}>
       <Container style={containerStyle}>
@@ -28,11 +27,11 @@ const Button = ({ title, onPress, containerStyle, textStyle }) => {
   );
 };
 
-// Button.propTypes = {
+// ButtonNoFlex.propTypes = {
 //   title: propTypes.string.isRequired,
 //   onPress: propTypes.func.isRequired,
 //   containerStyle: propTypes.object.isRequired,
 //   textStyle: propTypes.object.isRequired,
 // };
 
-export default Button;
+export default ButtonNoFlex;

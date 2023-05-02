@@ -2,7 +2,7 @@ import React from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons"; // 아이콘을 위한 패키지 import
 
-const CustomButton = ({ onPress, iconName, title }) => {
+const CustomButton = ({ onPress, iconName, title, containerStyle }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.squareButton}>

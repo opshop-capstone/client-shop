@@ -1,7 +1,15 @@
 import React, { useContext } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Profile, OpMain, PopularShop, Shop, Goods } from "../screens";
+import {
+  Profile,
+  OpMain,
+  PopularShop,
+  Shop,
+  Goods,
+  Cart,
+  Order,
+} from "../screens";
 import { Image, IconButton } from "../components";
 import Home from "./Home";
 import { Button } from "react-native";
@@ -19,7 +27,7 @@ const LogoTitle = () => {
     />
   );
 };
-const Main = () => {
+const Main = ({ navigation }) => {
   const theme = useContext(ThemeContext);
   return (
     <Stack.Navigator
@@ -81,6 +89,36 @@ const Main = () => {
         options={{
           title: "Main",
           headerTitle: "VINTAGE TALK",
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Cart"
+        component={Cart}
+        options={{
+          title: "Main",
+          headerTitle: "장바구니",
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Order"
+        component={Order}
+        options={{
+          title: "Main",
+          headerTitle: "주문하기",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />

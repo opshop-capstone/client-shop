@@ -79,8 +79,8 @@ const ItemCard = ({ url, style, onPress }) => {
   );
 };
 
-ItemCard.propTypes = {
-  url: propTypes.string,
-};
+// ItemCard.propTypes = {
+//   url: propTypes.string,
+// };
 
 export default ItemCard;

@@ -8,6 +8,7 @@ import Cart from "./Cart";
 import PopularShop from "./PopularShop";
 import Shop from "./Shop";
 import Goods from "./Goods";
+import Order from "./Order";
 
 export {
   Signin,
@@ -20,4 +21,5 @@ export {
   PopularShop,
   Shop,
   Goods,
+  Order,
 };

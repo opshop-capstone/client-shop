@@ -8,6 +8,7 @@ import { ScrollView } from "react-native";
 const Container = styled.View`
   flex: 1;
   flex-grow: 1;
+  padding: 10px;
   background-color: ${({ theme }) => theme.background};
 `;
 
