@@ -5,7 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons"; // 아이콘을 위한 �
 const CustomButton = ({ onPress, iconName, title, containerStyle }) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.squareButton}>
+      <View style={containerStyle ? containerStyle : styles.squareButton}>
         <Icon name={iconName} size={24} color="white" />
         <Text style={styles.buttonText}>{title}</Text>
       </View>
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     width: 60, // 원하는 크기로 지정
     height: 60,
     borderRadius: 8,
-    backgroundColor: "#111",
+    backgroundColor: "#d5d5d5",
     justifyContent: "center",
     alignItems: "center",
   },

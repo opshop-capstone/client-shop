@@ -35,7 +35,10 @@ const LowContainer = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
-const PopularShop = ({ navigation }) => {
+
+const PopularShop = ({ route, navigation }) => {
+  const { key } = route.params; // 전 화면에서 눌렀던 위에 카테고리 버튼 key받아오는
+
   const { setUser } = useContext(UserContext);
   return (
     <Container>
@@ -49,11 +52,26 @@ const PopularShop = ({ navigation }) => {
               { name: "apps", title: "카테고리" },
               { name: "star", title: "인기상품" },
             ].map((a, i) => {
-              return (
+              return i == key ? (
                 <CustomButton
-                  onPress={() => {
-                    navigation.navigate("PopularShop");
+                  key={i}
+                  containerStyle={{
+                    width: 60, // 원하는 크기로 지정
+                    height: 60,
+                    borderRadius: 8,
+                    backgroundColor: "grey",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "#111",
                   }}
+                  onPress={() => {}}
+                  iconName={a.name}
+                  title={a.title}
+                />
+              ) : (
+                <CustomButton
+                  key={i}
+                  onPress={() => {}}
                   iconName={a.name}
                   title={a.title}
                 />

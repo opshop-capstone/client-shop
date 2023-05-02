@@ -116,9 +116,12 @@ const Goods = ({ product, navigation }) => {
           iconName="heart"
           title="찜하기"
           containerStyle={{
-            marginLeft: 0,
-            backgroundColor: "#ededed",
-            height: 20,
+            width: 60, // 원하는 크기로 지정
+            height: 60,
+            borderRadius: 8,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#111",
           }}
         />
         <ButtonNoFlex

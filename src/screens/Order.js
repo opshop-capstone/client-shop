@@ -134,9 +134,24 @@ const Order = ({ navigation }) => {
             <StyledText style={styles.cardText}>카카오페이</StyledText>
           </View>
         </Card>
-
-        <StyledText>배송</StyledText>
+        <TotalPrice>
+          <StyledText>배송</StyledText>
+          <TouchableOpacity
+            onPress={() => {
+              handleAddToCart();
+            }}
+          >
+            <ButtonIcon />
+          </TouchableOpacity>
+        </TotalPrice>
         <Card containerStyle={styles.card}>
+          <Card.Title style={styles.cardTitle}>본가</Card.Title>
+          <Card.Divider />
+          <Text style={styles.cardText}>
+            인천광역시 미추홀구 주승로 96번길 42 주안한신휴플러스 201동, 407호
+          </Text>
+        </Card>
+        <Card containerStyle={(styles.card, { marginTop: 1 })}>
           <View
             style={{ flexDirection: "row", alignItems: "center", margin: 5 }}
           >
@@ -218,6 +233,9 @@ const Order = ({ navigation }) => {
               title="주문내역 확인하기"
               onPress={() => {
                 handleContinueShopping2();
+                navigation.reset({ routes: [{ name: "Home" }] });
+
+                navigation.navigate("Profile");
               }}
             />
             <Button

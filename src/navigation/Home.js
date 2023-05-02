@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { OpMain, Profile, Cart, Category } from "../screens";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { Main } from "./index";
 
 const Tab = createBottomTabNavigator();
 

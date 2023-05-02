@@ -77,11 +77,26 @@ const Shop = ({ navigation }) => {
             { name: "ios-copy", title: "브랜드별" },
             { name: "ios-glasses", title: "패션잡화" },
           ].map((a, i) => {
-            return (
+            return i == 0 ? (
               <CustomButton
-                onPress={() => {
-                  navigation.navigate("PopularShop");
+                key={i}
+                containerStyle={{
+                  width: 60, // 원하는 크기로 지정
+                  height: 60,
+                  borderRadius: 8,
+                  backgroundColor: "grey",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#111",
                 }}
+                onPress={() => {}}
+                iconName={a.name}
+                title={a.title}
+              />
+            ) : (
+              <CustomButton
+                key={i}
+                onPress={() => {}}
                 iconName={a.name}
                 title={a.title}
               />

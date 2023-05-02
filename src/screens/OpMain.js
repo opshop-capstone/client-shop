@@ -81,8 +81,9 @@ const OpMain = ({ navigation }) => {
             ].map((a, i) => {
               return (
                 <CustomButton
+                  key={i}
                   onPress={() => {
-                    navigation.navigate("PopularShop");
+                    navigation.navigate("PopularShop", { key: i });
                   }}
                   iconName={a.name}
                   title={a.title}
