@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Auth from "./Auth";
 import { UserContext } from "../contexts";
 import Main from "./Main";
+import MyPage from "./MyPage";
 
 const Navigation = () => {
   const { user } = useContext(UserContext);

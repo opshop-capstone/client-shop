@@ -9,9 +9,12 @@ import {
   Goods,
   Cart,
   Order,
+  OrderHistory,
+  EditAddress,
 } from "../screens";
-import { Image, IconButton } from "../components";
+import { IconButton, Image } from "../components";
 import Home from "./Home";
+import MyPage from "./MyPage";
 import { Button } from "react-native";
 
 const Stack = createStackNavigator();
@@ -22,8 +25,9 @@ const Container = styled.View`
 const LogoTitle = () => {
   return (
     <Image
-      style={{ width: 90, height: 90 }}
+      style={{ width: 80, height: 20, borderRadius: 0, overflow: "cover" }}
       url="https://ifh.cc/g/M2TJZp.png"
+      // source={require("../../assets/LogoTitle.png")}
     />
   );
 };
@@ -32,6 +36,7 @@ const Main = ({ navigation }) => {
   return (
     <Stack.Navigator
       screenOptions={{
+        overflow: "hidden",
         headerTitleAlign: "auto",
         headerTintColor: theme.text,
         headerBackTitleVisible: false,
@@ -57,6 +62,7 @@ const Main = ({ navigation }) => {
         name="PopularShop"
         component={PopularShop}
         options={{
+          tabBarStyle: { display: undefined },
           title: "Main",
           headerTitle: () => <LogoTitle />,
           headerRight: () => (
@@ -119,6 +125,51 @@ const Main = ({ navigation }) => {
         options={{
           title: "Main",
           headerTitle: "주문하기",
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      />
+      {/* <Stack.Screen
+        name="MyPage"
+        component={MyPage}
+        options={{
+          title: "Main",
+          headerTitle: "주문하기",
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      /> */}
+      <Stack.Screen
+        name="OrderHistory"
+        component={OrderHistory}
+        options={{
+          title: "Main",
+          headerTitle: "주문 내역 확인",
+          headerRight: () => (
+            <Container>
+              <IconButton name="menu" onPress={() => alert("test")} />
+              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="cart" onPress={() => alert("test")} />
+            </Container>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="EditAddress"
+        component={EditAddress}
+        options={{
+          title: "Main",
+          headerTitle: "회원 정보 수정",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />

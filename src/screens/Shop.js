@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts";
 import { Button, CustomButton, ItemCard, ShopCard } from "../components";
 import styled from "styled-components/native";
@@ -46,6 +46,9 @@ const ItemContainer = styled.View`
 `;
 const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
+  useEffect(() => {}, [categoryKey]);
+
+  const [categoryKey, setCategoryKey] = useState(0);
   return (
     <Container>
       <ScrollView>
@@ -77,7 +80,7 @@ const Shop = ({ navigation }) => {
             { name: "ios-copy", title: "브랜드별" },
             { name: "ios-glasses", title: "패션잡화" },
           ].map((a, i) => {
-            return i == 0 ? (
+            return i == categoryKey ? (
               <CustomButton
                 key={i}
                 containerStyle={{
@@ -96,7 +99,9 @@ const Shop = ({ navigation }) => {
             ) : (
               <CustomButton
                 key={i}
-                onPress={() => {}}
+                onPress={() => {
+                  setCategoryKey(i);
+                }}
                 iconName={a.name}
                 title={a.title}
               />

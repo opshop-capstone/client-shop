@@ -115,6 +115,9 @@ const Goods = ({ product, navigation }) => {
         <CustomButton
           iconName="heart"
           title="찜하기"
+          onPress={() => {
+            alert("상품이 찜한 상품에 추가되었어요!");
+          }}
           containerStyle={{
             width: 60, // 원하는 크기로 지정
             height: 60,

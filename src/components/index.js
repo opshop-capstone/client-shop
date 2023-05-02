@@ -8,6 +8,7 @@ import CustomButton from "./CustomButton";
 import ShopCard from "./ShopCard";
 import ButtonNoFlex from "./ButtonNoFlex";
 import AddToCartButton from "./AddToCartButton";
+import Checkbox from "./Checkbox";
 
 export {
   Button,
@@ -19,4 +20,5 @@ export {
   ShopCard,
   ButtonNoFlex,
   AddToCartButton,
+  Checkbox,
 };

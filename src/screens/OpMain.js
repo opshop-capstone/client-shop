@@ -74,10 +74,10 @@ const OpMain = ({ navigation }) => {
           <LowContainer>
             {[
               { name: "flame", title: "인기상점" },
-              { name: "heart", title: "찜한상품" },
               { name: "location", title: "지역별" },
               { name: "apps", title: "카테고리" },
               { name: "star", title: "인기상품" },
+              { name: "heart", title: "찜한상품" },
             ].map((a, i) => {
               return (
                 <CustomButton

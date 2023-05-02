@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts";
 import { Button, CustomButton, Image, Input, ShopCard } from "../components";
 import styled from "styled-components/native";
@@ -38,7 +38,8 @@ const LowContainer = styled.View`
 
 const PopularShop = ({ route, navigation }) => {
   const { key } = route.params; // 전 화면에서 눌렀던 위에 카테고리 버튼 key받아오는
-
+  useEffect(() => {}, [{ key }]);
+  const [categoryKey, setCategoryKey] = useState(key);
   const { setUser } = useContext(UserContext);
   return (
     <Container>
@@ -52,7 +53,7 @@ const PopularShop = ({ route, navigation }) => {
               { name: "apps", title: "카테고리" },
               { name: "star", title: "인기상품" },
             ].map((a, i) => {
-              return i == key ? (
+              return i == categoryKey ? (
                 <CustomButton
                   key={i}
                   containerStyle={{
@@ -71,7 +72,9 @@ const PopularShop = ({ route, navigation }) => {
               ) : (
                 <CustomButton
                   key={i}
-                  onPress={() => {}}
+                  onPress={() => {
+                    setCategoryKey(i);
+                  }}
                   iconName={a.name}
                   title={a.title}
                 />

@@ -9,6 +9,8 @@ import PopularShop from "./PopularShop";
 import Shop from "./Shop";
 import Goods from "./Goods";
 import Order from "./Order";
+import OrderHistory from "./OrderHistory";
+import EditAddress from "./EditAddress";
 
 export {
   Signin,
@@ -22,4 +24,6 @@ export {
   Shop,
   Goods,
   Order,
+  OrderHistory,
+  EditAddress,
 };

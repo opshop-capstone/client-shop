@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../contexts";
-import { Button, Image, Input } from "../components";
+import { Button, Input } from "../components";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -9,24 +10,133 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   background-color: ${({ theme }) => theme.background};
-  padding: 0 20px;
 `;
 
 const StyledText = styled.Text`
-  font-size: 30px;
-  color: #111;
-  font-weight: 600;
-  margin-bottom: 15px;
+  margin-top: 3px;
+  font-size: 14px;
+  color: grey;
 `;
 
 const Profile = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   return (
     <Container>
-      <StyledText>마이페이지</StyledText>
+      <View style={styles.header}>
+        <View style={styles.profile}>
+          <Image
+            source={require("../../assets/icon.png")}
+            style={styles.profileImg}
+          />
+        </View>
+        <View style={styles.profileInfo}>
+          <Text style={styles.name}>박 상호</Text>
+          <Text style={styles.email}>email@example.com</Text>
+        </View>
+      </View>
+      <View style={styles.cardContainer}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("OrderHistory")}
+        >
+          <Text style={styles.cardText}>주문 내역 확인</Text>
+          <StyledText>통합 주문내역을 확인하세요!</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("EditAddress")}
+        >
+          <Text style={styles.cardText}>배송지 수정</Text>
+          <StyledText>주소와 회원정보를 수정하세요!</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log("Payment Card Registration")}
+        >
+          <Text style={styles.cardText}>결제 수단</Text>
+          <StyledText>결제하실 카드를 등록 / 변경하세요!</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log("My Review")}
+        >
+          <Text style={styles.cardText}>나의 후기</Text>
+          <StyledText>내가 작성한 상점 후기를 확인하세요!</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log("My Inquiry")}
+        >
+          <Text style={styles.cardText}>나의 문의</Text>
+          <StyledText>
+            상점과 OP Shop에 대한 나의 문의 내역을 확인하세요!
+          </StyledText>
+        </TouchableOpacity>
+      </View>
+
       <Button title="로그아웃" onPress={() => setUser("")} />
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 20,
+    marginHorizontal: 15,
+  },
+  profile: {
+    borderWidth: 1,
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+  profileImg: {
+    width: 50,
+    height: 50,
+  },
+  profileInfo: {
+    alignItems: "flex-end",
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  email: {
+    fontSize: 14,
+    color: "#666",
+  },
+  cardContainer: {
+    width: "90%",
+    flex: 1,
+    marginHorizontal: 15,
+  },
+  card: {
+    marginTop: 10,
+    borderRadius: 5,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  cardText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
 
 export default Profile;
