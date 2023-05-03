@@ -4,6 +4,7 @@ const Colors = {
   main: "#111111",
   grey_0: "#d5d5d5",
   grey_1: "#a6a6a6",
+  red: "#e84118",
 };
 
 export const theme = {
@@ -11,6 +12,7 @@ export const theme = {
   text: Colors.black,
   btnBackground: Colors.main,
   btnTitle: Colors.white,
+  errorText: Colors.red,
 
   //Image
   imgBackground: Colors.grey_0,

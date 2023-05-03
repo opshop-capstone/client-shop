@@ -27,10 +27,26 @@ export default function App() {
       image: "https://ifh.cc/g/M2TJZp.png",
     },
   ]);
+
+  const [address, setAddress] = useState([
+    {
+      id: 1,
+      addressName: "본가",
+      address:
+        "인천광역시 미추홀구 주승로 96번길 42 주안한신휴플러스 201동, 407호",
+    },
+    {
+      id: 2,
+      addressName: "학교",
+      address: "용인시 수지구 죽전로 152, 단국대학교",
+    },
+  ]);
   return (
     <ThemeProvider theme={theme}>
       <UserProvider>
-        <ItemContext.Provider value={{ cartItems, setCartItems }}>
+        <ItemContext.Provider
+          value={{ cartItems, setCartItems, address, setAddress }}
+        >
           <StatusBar
             backgroundColor={theme.background}
             barStyle="dark-content"

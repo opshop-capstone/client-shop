@@ -1,9 +1,10 @@
-import React, { useState, useRef, useContext } from "react";
-import { Button, Image, Input } from "../components";
+import React, { useState, useRef, useContext, useEffect } from "react";
+import { Button, Image, Input, ErrorMessage } from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { UserContext } from "../contexts";
+import { validateEmail, removeWhitespace } from "../utils";
 
 const Container = styled.View`
   flex: 1;
@@ -26,10 +27,29 @@ const Signin = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const refPassword = useRef(null);
+  const [disabled, setDisabled] = useState(true);
 
   const { setUser } = useContext(UserContext);
   const { user } = useContext(UserContext);
+
+  useEffect(() => {
+    setDisabled(!(email && password && !errorMessage));
+  }, [email, password, errorMessage]);
+
+  //이메일 공백 제거와 이메일 형식 검사
+  const _handleEmailChange = (email) => {
+    const changedEmail = removeWhitespace(email);
+    setEmail(changedEmail);
+    setErrorMessage(
+      validateEmail(changedEmail) ? "" : "정확한 이메일 형식으로 입력해주세요."
+    );
+  };
+  const _handlePasswordChange = (password) => {
+    const changedPassword = removeWhitespace(password);
+    setPassword(changedPassword);
+  };
 
   const _handleSigninBtnPress = async () => {
     try {
@@ -56,7 +76,7 @@ const Signin = ({ navigation }) => {
           placeholder="aaaaa@email.com"
           returnKeyType="next"
           value={email}
-          onChangeText={setEmail}
+          onChangeText={_handleEmailChange}
           onSubmitEditing={() => {
             refPassword.current.focus();
           }}
@@ -65,11 +85,12 @@ const Signin = ({ navigation }) => {
           ref={refPassword}
           label="비밀번호"
           placeholder="password"
-          returnKeyType="ndoneext"
+          returnKeyType="next"
           value={password}
-          onChangeText={setPassword}
+          onChangeText={_handlePasswordChange}
           isPassword={true}
         />
+        <ErrorMessage message={errorMessage} />
         <Button
           title="비회원으로 둘러보기"
           onPress={() => {
@@ -90,6 +111,7 @@ const Signin = ({ navigation }) => {
           onPress={() => {
             _handleSigninBtnPress();
           }}
+          disabled={disabled}
         />
 
         <Button

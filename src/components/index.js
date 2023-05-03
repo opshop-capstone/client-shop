@@ -9,6 +9,7 @@ import ShopCard from "./ShopCard";
 import ButtonNoFlex from "./ButtonNoFlex";
 import AddToCartButton from "./AddToCartButton";
 import Checkbox from "./Checkbox";
+import ErrorMessage from "./ErrorMessage";
 
 export {
   Button,
@@ -21,4 +22,5 @@ export {
   ButtonNoFlex,
   AddToCartButton,
   Checkbox,
+  ErrorMessage,
 };

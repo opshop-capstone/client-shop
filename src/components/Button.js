@@ -11,6 +11,7 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   border-radius: 4px;
+  opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
 
 const Title = styled.Text`
@@ -18,10 +19,14 @@ const Title = styled.Text`
   color: ${({ theme }) => theme.btnTitle};
 `;
 
-const Button = ({ title, onPress, containerStyle, textStyle }) => {
+const Button = ({ title, onPress, containerStyle, textStyle, disabled }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={{ flexDirection: "row" }}>
-      <Container style={containerStyle}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={{ flexDirection: "row" }}
+      disabled={disabled}
+    >
+      <Container style={containerStyle} disabled={disabled}>
         <Title style={textStyle}>{title}</Title>
       </Container>
     </TouchableOpacity>

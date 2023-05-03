@@ -7,22 +7,16 @@ import {
   Image,
   ScrollView,
   Modal,
+  TextInput,
 } from "react-native";
 import { Card } from "react-native-elements";
 import styled from "styled-components";
-import { Button, CustomButton, Checkbox } from "../components";
+import { Button, CustomButton, Checkbox, Input } from "../components";
 import { ItemContext } from "../contexts";
 import { Ionicons } from "@expo/vector-icons";
-const FixContainer = styled.View`
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 70px;
-  margin: 10px;
-  display: flex;
-  justify-content: space-between;
+const InputContainer = styled.View`
+  width: 80%;
+  justify-content: center;
   align-items: center;
 `;
 const TotalPrice = styled.TouchableOpacity`
@@ -53,10 +47,15 @@ const StyledText = styled.Text`
   margin: 5px;
 `;
 
+const StyledButton = styled.Button`
+  background-color: black;
+  color: white;
+`;
+
 const EditAddress = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
-
-  const handleAddToCart = () => {
+  const { address, setAddress } = useContext(ItemContext);
+  const handleEditModalOpen = () => {
     setShowModal(true);
   };
 
@@ -65,7 +64,7 @@ const EditAddress = ({ navigation }) => {
     setShowModal(false);
   };
 
-  const handleContinueShopping = () => {
+  const handleModalClose = () => {
     setShowModal(false);
   };
   const [showModal2, setShowModal2] = useState(false);
@@ -82,7 +81,9 @@ const EditAddress = ({ navigation }) => {
   const handleContinueShopping2 = () => {
     setShowModal2(false);
   };
-
+  const editAddress = () => {
+    setAddress();
+  };
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -90,7 +91,7 @@ const EditAddress = ({ navigation }) => {
         <Card containerStyle={styles.card}>
           <TotalPrice
             onPress={() => {
-              handleAddToCart();
+              handleEditModalOpen();
             }}
           >
             <Text style={styles.cardTitle}>박상호</Text>
@@ -101,21 +102,26 @@ const EditAddress = ({ navigation }) => {
           <Text style={styles.cardText}>PW : ************* </Text>
         </Card>
         <StyledText>배송지</StyledText>
-        <Card containerStyle={styles.card}>
-          <TotalPrice
-            onPress={() => {
-              handleAddToCart();
-            }}
-          >
-            <Text style={styles.cardTitle}>본가</Text>
-            <ButtonIcon />
-          </TotalPrice>
-          <Card.Divider />
-          <Text style={styles.cardText}>
-            인천광역시 미추홀구 주승로 96번길 42 주안한신휴플러스 201동, 407호
-          </Text>
-          <Checkbox title="해당 배송지 사용하기" def={false} />
-        </Card>
+        {address.map((item, i) => {
+          return (
+            <Card containerStyle={styles.card}>
+              <TotalPrice
+                onPress={() => {
+                  handleEditModalOpen();
+                }}
+              >
+                <Text style={styles.cardTitle}>{item.addressName}</Text>
+                <ButtonIcon />
+              </TotalPrice>
+              <Card.Divider />
+              <Text style={styles.cardText}>{item.address} </Text>
+              <Checkbox
+                title="해당 배송지를 기본 배송지로"
+                def={i == 0 ? 1 : 0}
+              />
+            </Card>
+          );
+        })}
       </ScrollView>
       <Button
         onPress={handleAddToCart2}
@@ -125,17 +131,30 @@ const EditAddress = ({ navigation }) => {
       <Modal visible={showModal} animationType="slide">
         <View style={styles.modalContainer}>
           <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
-            결제수단 변경하기
+            배송지 변경하기
           </StyledText>
-          <Image
-            style={{ width: 100, height: 100, borderRadius: 10, marginTop: 30 }}
-            source={require("../../assets/kakao-pay.png")}
-          />
-          <StyledText>Kakao Pay</StyledText>
+          <InputContainer>
+            <Input label="이름 *" placeholder="수령인" />
+            <Input label="배송지명(선택)" placeholder="배송지명" />
+            <Input
+              label="휴대전화 *"
+              placeholder="'-'는 제외하고 입력해주세요"
+            />
+            <View
+              style={{
+                marginTop: 20,
+                flexDirection: "row",
+                justifyContent: "space-between",
+              }}
+            >
+              <TextInput style={{ borderWidth: 1, flex: 1, marginRight: 10 }} />
+              <StyledButton title="주소찾기" />
+            </View>
+          </InputContainer>
           <View style={styles.modalButtonsContainer}>
-            <Button title="변경" onPress={handleContinueShopping} />
+            <Button title="변경" onPress={handleModalClose} />
             <Button
-              title="결제수단 유지하기"
+              title="취소"
               containerStyle={{
                 backgroundColor: "#fff",
                 borderWidth: 1,
@@ -143,7 +162,7 @@ const EditAddress = ({ navigation }) => {
               }}
               textStyle={{ color: "#111" }}
               onPress={() => {
-                handleContinueShopping();
+                handleModalClose();
               }}
             />
           </View>

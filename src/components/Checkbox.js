@@ -17,7 +17,7 @@ const Checkbox = ({ title, def }) => {
       <MaterialIcons
         name={checked ? "check-box" : "check-box-outline-blank"}
         size={24}
-        color={checked ? "black" : "gray"}
+        color={checked ? "black" : "grey"}
       />
       <Text
         style={

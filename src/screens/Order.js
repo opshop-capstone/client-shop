@@ -235,7 +235,7 @@ const Order = ({ navigation }) => {
                 handleContinueShopping2();
                 navigation.reset({ routes: [{ name: "Home" }] });
 
-                navigation.navigate("Profile");
+                navigation.navigate("OrderHistory");
               }}
             />
             <Button
