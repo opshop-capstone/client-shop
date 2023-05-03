@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import axios from "axios";
 
 import {
   View,
@@ -42,8 +44,48 @@ const Contour = styled.View`
 `;
 
 const Goods = ({ product, navigation }) => {
+  //const productId = route.params.productId;
   const [cartMessage, setCartMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [storeName, setStoreName] = useState("");
+  const [title, setTitle] = useState("");
+  const [productPrice, setPrice] = useState("");
+  const [size, setSize] = useState("");
+  const [conetent, setContent] = useState("");
+  const [category, setCategory] = useState("");
+
+  //상품 상세
+  useEffect(() => {
+    try {
+      // 상품 상세 api
+      axios
+        .get("http://opshop.shop:3000/opshop/products/3")
+
+        .then(function (response) {
+          const result = response.data.result.info[0];
+          console.log(response.data.result.info[0]);
+          if (result) {
+            setStoreName(result.store_name);
+            setTitle(result.title);
+            setPrice(result.price);
+            setContent(result.content);
+            setSize(result.size);
+            setCategory(result.category);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
 
   const handleAddToCart = () => {
     setCartMessage("Added to Cart!");
