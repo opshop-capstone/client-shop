@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { UserContext } from "../contexts";
 import { validateEmail, removeWhitespace } from "../utils";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
@@ -24,15 +25,15 @@ const StyledText = styled.Text`
 `;
 
 const Signin = ({ navigation }) => {
+  const { setUserInfo } = useContext(UserContext);
+  const { user } = useContext(UserContext);
+
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const refPassword = useRef(null);
   const [disabled, setDisabled] = useState(true);
-
-  const { setUser } = useContext(UserContext);
-  const { user } = useContext(UserContext);
 
   useEffect(() => {
     setDisabled(!(email && password && !errorMessage));
@@ -52,14 +53,39 @@ const Signin = ({ navigation }) => {
   };
 
   const _handleSigninBtnPress = async () => {
-    try {
-      setUser(123);
-      console.log(user.uid);
-      console.log("로그인");
-    } catch (e) {
-      alert("로그인 에러", e.message);
-    }
+    setTimeout(async () => {
+      await axios
+        .post("http://opshop.shop:3000/opshop/login", {
+          email: `${email}`,
+          password: `${password}`,
+        })
+        .then((response) => {
+          console.log(response.data);
+          console.log(email);
+          if (response.data.result) {
+            const userId = response.data.result.userId;
+            const jwt = response.data.result.jwt;
+            const email = email;
+            setUserInfo({ userId, email, jwt });
+          } else {
+            alert("Error", response.data.message);
+          }
+        })
+        .catch((err) => {
+          alert("로그인 실패");
+        });
+    }, 1000);
   };
+
+  // const _handleSigninBtnPress = async () => {
+  //   try {
+  //     setUser(123);
+  //     console.log(user.uid);
+  //     console.log("로그인");
+  //   } catch (e) {
+  //     alert("로그인 에러", e.message);
+  //   }
+  // };
   return (
     <KeyboardAwareScrollView>
       <Container insets={insets}>
@@ -94,7 +120,7 @@ const Signin = ({ navigation }) => {
         <Button
           title="비회원으로 둘러보기"
           onPress={() => {
-            _handleSigninBtnPress();
+            setUserInfo({ userIdx: "111" });
           }}
           containerStyle={{
             marginTop: 0,

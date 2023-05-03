@@ -9,7 +9,7 @@ const Navigation = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <NavigationContainer>{user ? <Main /> : <Auth />}</NavigationContainer>
+    <NavigationContainer>{user?.jwt ? <Main /> : <Auth />}</NavigationContainer>
   );
 };
 

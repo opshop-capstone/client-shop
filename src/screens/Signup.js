@@ -20,16 +20,65 @@ const StyledText = styled.Text`
   margin-bottom: 15px;
 `;
 
+const signup = async ({ email, password, name }) => {
+  setLoading(true);
+  setTimeout(async () => {
+    setLoading(false);
+    console.log(inputs);
+    await axios
+      .post("http://13.125.249.247/filme/user", {
+        identification: `${inputs.identification}`,
+        password: `${inputs.password}`,
+        name: `${inputs.name}`,
+      })
+      .then((response) => {
+        if (response.data.isSuccess != true) {
+          Alert.alert("오류", response.data.message);
+        } else {
+          Alert.alert("가입이 완료되었습니다.");
+          navigation.navigate("Login");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        Alert.alert("오류", err.message);
+      });
+  }, 2000);
+};
 const Signup = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   const insets = useSafeAreaInsets();
+  const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const refPassword = useRef(null);
 
-  const _handleSignupBtnPress = () => {
-    console.log("회원가입");
+  const _handleSignupBtnPress = async ({ email, password, name }) => {
+    setTimeout(async () => {
+      console.log(email, password, name);
+      await axios
+        .post("http://opshop.shop", {
+          identification: `${email}`,
+          password: `${password}`,
+          name: `${name}`,
+        })
+        .then((response) => {
+          if (response.data.isSuccess != true) {
+            Alert.alert("오류", response.data.message);
+          } else {
+            Alert.alert("가입이 완료되었습니다.");
+            navigation.navigate("Login");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          Alert.alert("오류", err.message);
+        });
+    }, 2000);
   };
+  // const _handleSignupBtnPress = () => {
+  //   console.log("회원가입");
+  // };
   return (
     <KeyboardAwareScrollView extraScrollHeight={20}>
       <Container insets={insets}>
@@ -52,15 +101,15 @@ const Signup = ({ navigation }) => {
         <Input
           label="이메일"
           placeholder="aaaa@email.com"
-          returnKeyType="ndoneext"
-          value={password}
-          onChangeText={setPassword}
+          returnKeyType="next"
+          value={email}
+          onChangeText={setEmail}
         />
         <Input
           ref={refPassword}
           label="비밀번호"
           placeholder="password"
-          returnKeyType="ndoneext"
+          returnKeyType="next"
           value={password}
           onChangeText={setPassword}
           isPassword={true}
@@ -70,7 +119,7 @@ const Signup = ({ navigation }) => {
           ref={refPassword}
           label="비밀번호 확인"
           placeholder="password confirm"
-          returnKeyType="ndoneext"
+          returnKeyType="next"
           value={password}
           onChangeText={setPassword}
           isPassword={true}
@@ -78,7 +127,7 @@ const Signup = ({ navigation }) => {
         <Input
           label="휴대폰번호"
           placeholder="'-'는 제외하고 입력하세요."
-          returnKeyType="ndoneext"
+          returnKeyType="next"
           value={password}
           onChangeText={setPassword}
           isPassword={true}

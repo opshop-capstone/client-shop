@@ -19,7 +19,7 @@ const StyledText = styled.Text`
 `;
 
 const Profile = ({ navigation }) => {
-  const { setUser } = useContext(UserContext);
+  const { setUserInfo } = useContext(UserContext);
   return (
     <Container>
       <View style={styles.header}>
@@ -74,7 +74,7 @@ const Profile = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <Button title="로그아웃" onPress={() => setUser("")} />
+      <Button title="로그아웃" onPress={() => setUserInfo({ userIdx: "" })} />
     </Container>
   );
 };
