@@ -14,6 +14,7 @@ import styled from "styled-components";
 import { Button, CustomButton, Checkbox, Input } from "../components";
 import { ItemContext } from "../contexts";
 import { Ionicons } from "@expo/vector-icons";
+
 const InputContainer = styled.View`
   width: 80%;
   justify-content: center;
@@ -55,14 +56,16 @@ const StyledButton = styled.Button`
 const EditAddress = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const { address, setAddress } = useContext(ItemContext);
+  const [recipient, setRecipent] = useState("");
+  const [addressNickname, setAddressNickname] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [zipcode, setZipcode] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
+  const [detailAddress, setDetailAddress] = useState("");
+  const [addressNumber, setAddressNumber] = useState(0);
+
   const handleEditModalOpen = () => {
     setShowModal(true);
-  };
-
-  const handleMoveToCart = () => {
-    console.log("Navigating to Cart");
-    setShowModal(false);
   };
 
   const handleModalClose = () => {
@@ -70,13 +73,8 @@ const EditAddress = ({ navigation }) => {
   };
   const [showModal2, setShowModal2] = useState(false);
 
-  const handleAddToCart2 = () => {
+  const handleAddAddress = () => {
     setShowModal2(true);
-  };
-
-  const handleMoveToCart2 = () => {
-    console.log("Navigating to Cart");
-    setShowModal2(false);
   };
 
   const handleContinueShopping2 = () => {
@@ -108,6 +106,8 @@ const EditAddress = ({ navigation }) => {
             <Card containerStyle={styles.card}>
               <TotalPrice
                 onPress={() => {
+                  setAddressNumber(i);
+
                   handleEditModalOpen();
                 }}
               >
@@ -125,7 +125,7 @@ const EditAddress = ({ navigation }) => {
         })}
       </ScrollView>
       <Button
-        onPress={handleAddToCart2}
+        onPress={handleAddAddress}
         title="배송지 추가하기"
         containerStyle={styles.button}
       />
@@ -135,25 +135,67 @@ const EditAddress = ({ navigation }) => {
             배송지 변경하기
           </StyledText>
           <InputContainer>
-            <Input label="이름 *" placeholder="수령인" value={address} />
-            <Input label="배송지명(선택)" placeholder="배송지명" />
             <Input
-              label="휴대전화 *"
-              placeholder="'-'는 제외하고 입력해주세요"
+              label="이름 (필수)"
+              placeholder="수령인"
+              value={recipient}
+              onChangeText={setRecipent}
             />
-            <View
-              style={{
-                marginTop: 20,
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <TextInput style={{ borderWidth: 1, flex: 1, marginRight: 10 }} />
-              <StyledButton title="주소찾기" />
-            </View>
+            <Input
+              label="배송지 별칭(선택)"
+              placeholder="배송지명"
+              value={addressNickname}
+              onChangeText={setAddressNickname}
+            />
+            <Input
+              label="휴대전화 (필수)"
+              placeholder="'-'는 제외하고 입력해주세요"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+            />
+            <Input
+              label="우편 번호 (필수)"
+              placeholder="22231  "
+              value={zipcode}
+              onChangeText={setZipcode}
+            />
+            <Input
+              label="주소 (필수)"
+              placeholder="판교역로 166, 분당 주공, 백현동 53"
+              value={shippingAddress}
+              onChangeText={setShippingAddress}
+            />
+            <Input
+              label="상세 주소 (필수)"
+              placeholder="아파트 동과 호수  "
+              value={detailAddress}
+              onChangeText={setDetailAddress}
+            />
+
+            {/* <View
+                style={{
+                  marginTop: 20,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <TextInput style={{ borderWidth: 1, flex: 1, marginRight: 10 }} />
+                <StyledButton title="주소찾기" />
+              </View> */}
           </InputContainer>
           <View style={styles.modalButtonsContainer}>
-            <Button title="변경" onPress={handleModalClose} />
+            <Button
+              title="변경"
+              onPress={() => {
+                address[addressNumber] = {
+                  id: addressNumber,
+                  addressName: addressNickname,
+                  address: shippingAddress + "," + detailAddress,
+                };
+                setAddress([...address]);
+                handleModalClose();
+              }}
+            />
             <Button
               title="취소"
               containerStyle={{
@@ -164,6 +206,79 @@ const EditAddress = ({ navigation }) => {
               textStyle={{ color: "#111" }}
               onPress={() => {
                 handleModalClose();
+              }}
+            />
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={showModal2} animationType="slide">
+        <View style={styles.modalContainer}>
+          <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
+            배송지 변경하기
+          </StyledText>
+          <InputContainer>
+            <Input
+              label="이름 (필수)"
+              placeholder="수령인"
+              value={recipient}
+              onChangeText={setRecipent}
+            />
+            <Input
+              label="배송지 별칭(선택)"
+              placeholder="배송지명"
+              value={addressNickname}
+              onChangeText={setAddressNickname}
+            />
+            <Input
+              label="휴대전화 (필수)"
+              placeholder="'-'는 제외하고 입력해주세요"
+              value={phoneNumber}
+              onChangeText={setPhoneNumber}
+            />
+            <Input
+              label="우편 번호 (필수)"
+              placeholder="22231  "
+              value={zipcode}
+              onChangeText={setZipcode}
+            />
+            <Input
+              label="주소 (필수)"
+              placeholder="판교역로 166, 분당 주공, 백현동 53"
+              value={shippingAddress}
+              onChangeText={setShippingAddress}
+            />
+            <Input
+              label="상세 주소 (필수)"
+              placeholder="아파트 동과 호수  "
+              value={detailAddress}
+              onChangeText={setDetailAddress}
+            />
+          </InputContainer>
+          <View style={styles.modalButtonsContainer}>
+            <Button
+              title="추가"
+              onPress={() => {
+                setAddress([
+                  ...address,
+                  {
+                    id: address.length + 1,
+                    addressName: addressNickname,
+                    address: shippingAddress + "," + detailAddress,
+                  },
+                ]);
+                console.log(address);
+              }}
+            />
+            <Button
+              title="취소"
+              containerStyle={{
+                backgroundColor: "#fff",
+                borderWidth: 1,
+                borderColor: "#000",
+              }}
+              textStyle={{ color: "#111" }}
+              onPress={() => {
+                handleContinueShopping2();
               }}
             />
           </View>
