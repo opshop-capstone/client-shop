@@ -30,19 +30,19 @@ const Home = () => {
         }}
       />
       <Tab.Screen
-        name="   "
-        component={SubscribeShop}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabIcon({ name: focused ? "heart" : "heart-outline", focused }),
-        }}
-      />
-      <Tab.Screen
         name="    "
         component={Cart}
         options={{
           tabBarIcon: ({ focused }) =>
             TabIcon({ name: focused ? "cart" : "cart-outline", focused }),
+        }}
+      />
+      <Tab.Screen
+        name="   "
+        component={SubscribeShop}
+        options={{
+          tabBarIcon: ({ focused }) =>
+            TabIcon({ name: focused ? "heart" : "heart-outline", focused }),
         }}
       />
       <Tab.Screen
