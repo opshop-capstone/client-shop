@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./theme";
 import Navigation from "./navigation";
-import { UserProvider, ItemContext } from "./contexts";
+import { UserProvider, ItemContext, CartProvider } from "./contexts";
 import { useState } from "react";
 
 export default function App() {
@@ -14,18 +14,18 @@ export default function App() {
       price: "59000",
       image: "https://m.oldlook.co.kr/web/product/big/ok31400.JPG",
     },
-    {
-      id: 2,
-      name: "Product 2",
-      price: "49000",
-      image: "https://ifh.cc/g/M2TJZp.png",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      price: 0,
-      image: "https://ifh.cc/g/M2TJZp.png",
-    },
+    // {
+    //   id: 2,
+    //   name: "Product 2",
+    //   price: "49000",
+    //   image: "https://ifh.cc/g/M2TJZp.png",
+    // },
+    // {
+    //   id: 3,
+    //   name: "Product 3",
+    //   price: 0,
+    //   image: "https://ifh.cc/g/M2TJZp.png",
+    // },
   ]);
 
   const [address, setAddress] = useState([
@@ -44,15 +44,17 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <UserProvider>
-        <ItemContext.Provider
-          value={{ cartItems, setCartItems, address, setAddress }}
-        >
-          <StatusBar
-            backgroundColor={theme.background}
-            barStyle="dark-content"
-          />
-          <Navigation />
-        </ItemContext.Provider>
+        <CartProvider>
+          <ItemContext.Provider
+            value={{ cartItems, setCartItems, address, setAddress }}
+          >
+            <StatusBar
+              backgroundColor={theme.background}
+              barStyle="dark-content"
+            />
+            <Navigation />
+          </ItemContext.Provider>
+        </CartProvider>
       </UserProvider>
     </ThemeProvider>
   );

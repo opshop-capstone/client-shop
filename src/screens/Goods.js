@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import axios from "axios";
 
@@ -19,6 +19,7 @@ import {
   Button,
 } from "../components";
 import styled from "styled-components";
+import { CartContext, ItemContext } from "../contexts";
 
 const LowContainer = styled.View`
   position: fixed;
@@ -50,9 +51,13 @@ const Goods = ({ route, product, navigation }) => {
   const [storeName, setStoreName] = useState("");
   const [title, setTitle] = useState("");
   const [productPrice, setPrice] = useState("");
+  const [imageUrl, setImageUrl] = useState(null);
+  const [detailCutUrl, setDetailCutUrl] = useState(null);
   const [size, setSize] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
+  const { cartItems, setCartItems } = useContext(ItemContext);
+  const { cart, setCart } = useContext(CartContext);
 
   //상품 상세
   useEffect(() => {
@@ -65,8 +70,9 @@ const Goods = ({ route, product, navigation }) => {
         .then(function (response) {
           const result = response.data.result.info[0];
           const test = response.data.result;
-          console.log(response.data.result.info[0]);
-          console.log(response.data.result.info[1]);
+          const imageArr =
+            response.data.result.images[0].product_image.split(",");
+          console.log(imageArr);
           if (result) {
             setStoreName(result.store_name);
             setTitle(result.title);
@@ -74,6 +80,8 @@ const Goods = ({ route, product, navigation }) => {
             setContent(result.content);
             setSize(result.size);
             setCategory(result.category);
+            setImageUrl(imageArr[0]);
+            setDetailCutUrl(imageArr[1]);
           }
         })
         .catch(function (error) {
@@ -145,7 +153,7 @@ const Goods = ({ route, product, navigation }) => {
   return (
     <Container>
       <ScrollView>
-        <Image source={{ uri: image }} style={styles.image} />
+        <Image source={{ uri: `${imageUrl}` }} style={styles.image} />
         <View style={styles.info}>
           <Text style={styles.shopName}>{storeName}</Text>
           <Text style={styles.productName}>{title}</Text>
@@ -154,10 +162,11 @@ const Goods = ({ route, product, navigation }) => {
             {category == "TOP" ? "상의" : "다른거"}
           </Text>
           <Text style={styles.description}>{size}</Text>
-          <Text style={styles.price}>{productPrice} 원</Text>
+          <Text style={styles.price}>{productPrice.toLocaleString()} 원</Text>
           <Contour />
           <Text style={styles.description}>{content}</Text>
         </View>
+        <Image source={{ uri: `${detailCutUrl}` }} style={styles.detailCut} />
       </ScrollView>
 
       <LowContainer>
@@ -187,6 +196,16 @@ const Goods = ({ route, product, navigation }) => {
           onPress={() => {
             console.log({ product });
             handleAddToCart();
+            setCartItems([
+              ...cartItems,
+              {
+                id: cartItems.length + 1,
+                name: title,
+                price: `${productPrice}`,
+                image: `${imageUrl}`,
+              },
+            ]);
+            console.log(cartItems);
           }}
           title="장바구니에 담기"
         />
@@ -194,7 +213,7 @@ const Goods = ({ route, product, navigation }) => {
       <Modal visible={showModal} animationType="slide">
         <View style={styles.modalContainer}>
           <StyledText>장바구니에 </StyledText>
-          <StyledText> '{productName}' 이 </StyledText>
+          <StyledText> '{title}' 이 </StyledText>
           <StyledText> 담겼어요! </StyledText>
           <Contour />
 
@@ -229,12 +248,17 @@ const styles = StyleSheet.create({
     marginTop: 40,
     flex: 1,
     width: "100%",
-    height: "90%",
+    height: "100%",
     backgroundColor: "#fff",
   },
   image: {
     width: "100%",
     height: 300,
+    resizeMode: "cover",
+  },
+  detailCut: {
+    width: "100%",
+    height: 1500,
     resizeMode: "cover",
   },
   info: {

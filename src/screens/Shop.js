@@ -10,6 +10,7 @@ import {
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { FlatList, ScrollView, View } from "react-native";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
@@ -63,6 +64,32 @@ const category = [
 ];
 const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
+  useEffect(() => {
+    try {
+      // 상품 상세 api
+      axios
+        .get(`http://opshop.shop:3000/opshop/products/`)
+
+        .then(function (response) {
+          const result = response.data;
+          console.log(result);
+
+          if (result) {
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
   useEffect(() => {}, [categoryKey]);
 
   const [categoryKey, setCategoryKey] = useState(1);
@@ -78,7 +105,7 @@ const Shop = ({ navigation }) => {
           description="매장 전화 번호 : 010-7343-0102
           인스타그램 : vintage_talk"
         />
-        <StoreCard />
+        {/* <StoreCard /> */}
         <Button title="구독하기" />
         <Contour />
         <FlatList

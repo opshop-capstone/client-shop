@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled, { ThemeContext } from "styled-components";
 import { FlatList } from "react-native";
 import { Image, IconButton, ItemCard, CustomButton } from "../components";
 import { SliderBox } from "react-native-image-slider-box";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { ScrollView } from "react-native";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;

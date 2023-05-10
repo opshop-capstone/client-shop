@@ -55,6 +55,7 @@ const StyledButton = styled.Button`
 const EditAddress = ({ navigation }) => {
   const [showModal, setShowModal] = useState(false);
   const { address, setAddress } = useContext(ItemContext);
+  const [shippingAddress, setShippingAddress] = useState("");
   const handleEditModalOpen = () => {
     setShowModal(true);
   };
@@ -134,7 +135,7 @@ const EditAddress = ({ navigation }) => {
             배송지 변경하기
           </StyledText>
           <InputContainer>
-            <Input label="이름 *" placeholder="수령인" />
+            <Input label="이름 *" placeholder="수령인" value={address} />
             <Input label="배송지명(선택)" placeholder="배송지명" />
             <Input
               label="휴대전화 *"

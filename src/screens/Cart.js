@@ -45,26 +45,6 @@ const ButtonIcon = styled(Feather).attrs({
 `;
 
 const Cart = ({ navigation }) => {
-  // const [cartItems, setCartItems] = useState([
-  //   {
-  //     id: 1,
-  //     name: "랄프로렌 울 모직 여자 M",
-  //     price: "59000",
-  //     image: "https://m.oldlook.co.kr/web/product/big/ok31400.JPG",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Product 2",
-  //     price: "49000",
-  //     image: "https://ifh.cc/g/M2TJZp.png",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Product 3",
-  //     price: 0,
-  //     image: "https://ifh.cc/g/M2TJZp.png",
-  //   },
-  // ]);
   const { cartItems, setCartItems } = useContext(ItemContext);
   let sum = 0;
 
