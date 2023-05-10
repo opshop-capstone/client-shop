@@ -3,7 +3,7 @@ import Signup from "./Signup";
 import PwFind from "./PwFind";
 import Profile from "./Profile";
 import OpMain from "./OpMain";
-import Category from "./Category";
+import SubscribeShop from "./SubscribeShop";
 import Cart from "./Cart";
 import PopularShop from "./PopularShop";
 import Shop from "./Shop";
@@ -18,7 +18,7 @@ export {
   PwFind,
   Profile,
   OpMain,
-  Category,
+  SubscribeShop,
   Cart,
   PopularShop,
   Shop,

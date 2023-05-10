@@ -4,6 +4,7 @@ import { Button, CustomButton, Image, Input, ShopCard } from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView } from "react-native";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
@@ -37,6 +38,33 @@ const LowContainer = styled.View`
 `;
 
 const PopularShop = ({ route, navigation }) => {
+  useEffect(() => {
+    try {
+      // 왜 response.data.result값이 undefined가 오는거지
+      axios
+        .get("http://opshop.shop:3000/opshop/products")
+
+        .then(function (response) {
+          const result = response.data.result;
+          console.log("dd");
+          console.log(result);
+          if (result) {
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
   const { key } = route.params; // 전 화면에서 눌렀던 위에 카테고리 버튼 key받아오는
   useEffect(() => {}, [{ key }]);
   const [categoryKey, setCategoryKey] = useState(key);

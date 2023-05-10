@@ -65,13 +65,16 @@ const Signin = ({ navigation }) => {
           if (response.data.result) {
             const userId = response.data.result.userId;
             const jwt = response.data.result.jwt;
-            const email = email;
-            setUserInfo({ userId, email, jwt });
+            const userEmail = email;
+            setUserInfo({ userId, userEmail, jwt });
           } else {
             alert("Error", response.data.message);
           }
         })
         .catch((err) => {
+          console.log(err.message);
+          console.log(err.name);
+          console.log(err.stack);
           alert("로그인 실패");
         });
     }, 1000);
@@ -120,7 +123,7 @@ const Signin = ({ navigation }) => {
         <Button
           title="비회원으로 둘러보기"
           onPress={() => {
-            setUserInfo({ userIdx: "111" });
+            setUserInfo({ jwt: "111" });
           }}
           containerStyle={{
             marginTop: 0,

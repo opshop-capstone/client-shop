@@ -1,13 +1,20 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts";
-import { Button, CustomButton, ItemCard, ShopCard } from "../components";
+import {
+  Button,
+  CustomButton,
+  ItemCard,
+  ShopCard,
+  StoreCard,
+} from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ScrollView } from "react-native";
+import { FlatList, ScrollView } from "react-native";
 
 const Container = styled.View`
   flex: 1;
   flex-grow: 1;
+
   background-color: ${({ theme }) => theme.background};
 `;
 
@@ -24,6 +31,7 @@ const BoxContainer = styled.View`
   background-color: ${({ theme }) => theme.background};
 `;
 const Contour = styled.View`
+  margin: 10px;
   border-bottom-width: 2px;
   border-color: ${({ theme }) => theme.imgBackground};
 `;
@@ -37,13 +45,22 @@ const LowContainer = styled.View`
 `;
 
 const ItemContainer = styled.View`
-  margin: 25px;
+  margin: 10px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   overflow: auto;
   flex-wrap: wrap;
 `;
+
+const category = [
+  { id: 1, name: "thumbs-up", title: "인기상품" },
+  { id: 2, name: "shirt", title: "부위별" },
+  { id: 3, name: "color-wand", title: "신상품" },
+  { id: 4, name: "ios-copy", title: "브랜드별" },
+  { id: 5, name: "ios-glasses", title: "패션잡화" },
+  { id: 6, name: "ios-glasses", title: "패션잡화" },
+];
 const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   useEffect(() => {}, [categoryKey]);
@@ -61,7 +78,34 @@ const Shop = ({ navigation }) => {
           description="매장 전화 번호 : 010-7343-0102
           인스타그램 : vintage_talk"
         />
-        <ScrollView
+        <StoreCard />
+        <Button title="구독하기" />
+        <Contour />
+        <FlatList
+          data={category}
+          keyExtractor={(item) => item.id.toString()}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => (
+            <CustomButton
+              key={item.id}
+              containerStyle={{
+                width: 60, // 원하는 크기로 지정
+                height: 60,
+                borderRadius: 8,
+                marginRight: 16,
+                backgroundColor: "grey",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#111",
+              }}
+              onPress={() => {}}
+              iconName={item.name}
+              title={item.title}
+            />
+          )}
+        />
+        {/* <ScrollView
           contentContainerStyle={{
             margin: 25,
             flexDirection: "row",
@@ -107,23 +151,23 @@ const Shop = ({ navigation }) => {
               />
             );
           })}
-        </ScrollView>
+        </ScrollView> */}
 
-        <Contour />
         <StyledText>매장 인기 상품</StyledText>
         <ItemContainer>
-          <ItemCard
+          {/* <ItemCard
             onPress={() => {
               navigation.navigate("Goods");
             }}
             url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
-          />
+          /> */}
 
-          {[1, 2, 3, 4, 5, 6].map(() => {
+          {[1, 2, 3, 4, 5, 6].map((a, i) => {
             return (
               <ItemCard
+                key={i}
                 onPress={() => {
-                  navigation.navigate("Goods");
+                  navigation.navigate("Goods", { productId: i });
                 }}
                 url="https://ifh.cc/g/M2TJZp.png"
               />

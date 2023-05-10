@@ -96,18 +96,18 @@ const OpMain = ({ navigation }) => {
         <BoxContainer>
           <StyledText>박상호님을 위한 맞춤 Pick!</StyledText>
           <ItemContainer>
-            <ItemCard
+            {/* <ItemCard
               onPress={() => {
-                navigation.navigate("Goods");
+                navigation.navigate("Goods"), { key: 0 };
               }}
               url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
-            />
-            {[1, 2, 3, 4, 5, 6].map(() => {
+            /> */}
+            {[1, 2, 3, 4, 5, 6].map((a, i) => {
               return (
                 <ItemCard
                   url="https://ifh.cc/g/M2TJZp.png"
                   onPress={() => {
-                    navigation.navigate("Goods");
+                    navigation.navigate("Goods", { productId: i });
                   }}
                 />
               );

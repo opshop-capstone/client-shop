@@ -19,7 +19,7 @@ const StyledText = styled.Text`
 `;
 
 const Profile = ({ navigation }) => {
-  const { setUserInfo } = useContext(UserContext);
+  const { user, setUserInfo } = useContext(UserContext);
   return (
     <Container>
       <View style={styles.header}>
@@ -30,8 +30,8 @@ const Profile = ({ navigation }) => {
           />
         </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>박 상호</Text>
-          <Text style={styles.email}>email@example.com</Text>
+          <Text style={styles.name}>박상호</Text>
+          <Text style={styles.email}>{user.userEmail}</Text>
         </View>
       </View>
       <View style={styles.cardContainer}>
@@ -51,14 +51,14 @@ const Profile = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => console.log("Payment Card Registration")}
+          onPress={() => console.log(user.userEmail)}
         >
           <Text style={styles.cardText}>결제 수단</Text>
           <StyledText>결제하실 카드를 등록 / 변경하세요!</StyledText>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => console.log("My Review")}
+          onPress={() => console.log("나의 후기")}
         >
           <Text style={styles.cardText}>나의 후기</Text>
           <StyledText>내가 작성한 상점 후기를 확인하세요!</StyledText>

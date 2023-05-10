@@ -43,27 +43,30 @@ const Contour = styled.View`
   border-color: ${({ theme }) => theme.imgBackground};
 `;
 
-const Goods = ({ product, navigation }) => {
-  //const productId = route.params.productId;
+const Goods = ({ route, product, navigation }) => {
+  const productId = route.params.productId;
   const [cartMessage, setCartMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [storeName, setStoreName] = useState("");
   const [title, setTitle] = useState("");
   const [productPrice, setPrice] = useState("");
   const [size, setSize] = useState("");
-  const [conetent, setContent] = useState("");
+  const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
 
   //상품 상세
   useEffect(() => {
+    console.log(productId);
     try {
       // 상품 상세 api
       axios
-        .get("http://opshop.shop:3000/opshop/products/3")
+        .get(`http://opshop.shop:3000/opshop/products/${productId}`)
 
         .then(function (response) {
           const result = response.data.result.info[0];
+          const test = response.data.result;
           console.log(response.data.result.info[0]);
+          console.log(response.data.result.info[1]);
           if (result) {
             setStoreName(result.store_name);
             setTitle(result.title);
@@ -144,12 +147,16 @@ const Goods = ({ product, navigation }) => {
       <ScrollView>
         <Image source={{ uri: image }} style={styles.image} />
         <View style={styles.info}>
-          <Text style={styles.shopName}>{shopName}</Text>
-          <Text style={styles.productName}>{productName}</Text>
+          <Text style={styles.shopName}>{storeName}</Text>
+          <Text style={styles.productName}>{title}</Text>
           <Text style={styles.brandName}>{brandName}</Text>
-          <Text style={styles.price}>{price} 원</Text>
+          <Text style={styles.brandName}>
+            {category == "TOP" ? "상의" : "다른거"}
+          </Text>
+          <Text style={styles.description}>{size}</Text>
+          <Text style={styles.price}>{productPrice} 원</Text>
           <Contour />
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>{content}</Text>
         </View>
       </ScrollView>
 

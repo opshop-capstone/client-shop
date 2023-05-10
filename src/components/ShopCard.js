@@ -15,19 +15,24 @@ const ShopCard = ({ onPress, image, title, description }) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: "100%",
+    width: "90%",
     height: 95,
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 10,
     paddingVertical: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
+    marginHorizontal: 15,
   },
   image: {
     width: 70,
     height: 70,
-    borderRadius: 35,
     marginRight: 10,
   },
   info: {

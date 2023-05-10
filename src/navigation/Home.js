@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "styled-components/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { OpMain, Profile, Cart, Category } from "../screens";
+import { OpMain, Profile, Cart, Category, SubscribeShop } from "../screens";
 import { AntDesign } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Main } from "./index";
@@ -31,10 +31,10 @@ const Home = () => {
       />
       <Tab.Screen
         name="   "
-        component={Category}
+        component={SubscribeShop}
         options={{
           tabBarIcon: ({ focused }) =>
-            TabIcon({ name: focused ? "apps" : "apps-outline", focused }),
+            TabIcon({ name: focused ? "heart" : "heart-outline", focused }),
         }}
       />
       <Tab.Screen
