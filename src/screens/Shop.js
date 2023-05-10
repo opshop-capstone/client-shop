@@ -9,7 +9,7 @@ import {
 } from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { FlatList, ScrollView } from "react-native";
+import { FlatList, ScrollView, View } from "react-native";
 
 const Container = styled.View`
   flex: 1;
@@ -55,8 +55,8 @@ const ItemContainer = styled.View`
 
 const category = [
   { id: 1, name: "thumbs-up", title: "인기상품" },
-  { id: 2, name: "shirt", title: "부위별" },
   { id: 3, name: "color-wand", title: "신상품" },
+  { id: 2, name: "shirt", title: "부위별" },
   { id: 4, name: "ios-copy", title: "브랜드별" },
   { id: 5, name: "ios-glasses", title: "패션잡화" },
   { id: 6, name: "ios-glasses", title: "패션잡화" },
@@ -65,7 +65,7 @@ const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   useEffect(() => {}, [categoryKey]);
 
-  const [categoryKey, setCategoryKey] = useState(0);
+  const [categoryKey, setCategoryKey] = useState(1);
   return (
     <Container>
       <ScrollView>
@@ -94,12 +94,13 @@ const Shop = ({ navigation }) => {
                 height: 60,
                 borderRadius: 8,
                 marginRight: 16,
-                backgroundColor: "grey",
+                backgroundColor: item.id == categoryKey ? "black" : "#d5d5d5",
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: "#111",
               }}
-              onPress={() => {}}
+              onPress={() => {
+                setCategoryKey(item.id);
+              }}
               iconName={item.name}
               title={item.title}
             />
@@ -152,28 +153,35 @@ const Shop = ({ navigation }) => {
             );
           })}
         </ScrollView> */}
-
-        <StyledText>매장 인기 상품</StyledText>
-        <ItemContainer>
-          {/* <ItemCard
+        {categoryKey == 1 && (
+          <View>
+            <StyledText>매장 인기 상품</StyledText>
+            <ItemContainer>
+              {/* <ItemCard
             onPress={() => {
               navigation.navigate("Goods");
             }}
             url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
           /> */}
 
-          {[1, 2, 3, 4, 5, 6].map((a, i) => {
-            return (
-              <ItemCard
-                key={i}
-                onPress={() => {
-                  navigation.navigate("Goods", { productId: i });
-                }}
-                url="https://ifh.cc/g/M2TJZp.png"
-              />
-            );
-          })}
-        </ItemContainer>
+              {[1, 2, 3, 4, 5, 6].map((a, i) => {
+                return (
+                  <ItemCard
+                    key={i}
+                    onPress={() => {
+                      navigation.navigate("Goods", { productId: i });
+                    }}
+                    url="https://ifh.cc/g/M2TJZp.png"
+                  />
+                );
+              })}
+            </ItemContainer>
+          </View>
+        )}
+        {categoryKey == 2 && <StyledText>부위별</StyledText>}
+        {categoryKey == 3 && <StyledText>신상품</StyledText>}
+        {categoryKey == 4 && <StyledText>브랜드별</StyledText>}
+        {categoryKey == 5 && <StyledText>패션잡화</StyledText>}
       </ScrollView>
     </Container>
   );

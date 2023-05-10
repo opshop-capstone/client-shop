@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {
   View,
@@ -8,6 +8,7 @@ import {
   FlatList,
   Image,
 } from "react-native";
+import { ItemCard } from "../components";
 
 const Container = styled.View`
   flex: 1;
@@ -66,6 +67,8 @@ const NEW_PRODUCTS = [
 ];
 
 const SubscribeShop = () => {
+  const [showNewProducts, setShowNewProducts] = useState(true);
+
   return (
     <View style={styles.container}>
       <View style={styles.subscribedStoresContainer}>
@@ -85,18 +88,57 @@ const SubscribeShop = () => {
           )}
         />
       </View>
+      <View style={styles.tabs}>
+        <Text
+          style={[styles.tab, showNewProducts && styles.activeTab]}
+          onPress={() => setShowNewProducts(true)}
+        >
+          New Products
+        </Text>
+        <Text
+          style={[styles.tab, !showNewProducts && styles.activeTab]}
+          onPress={() => setShowNewProducts(false)}
+        >
+          Favorite Items
+        </Text>
+      </View>
+
       <View style={styles.newProductsContainer}>
-        <Text style={styles.newProductsTitle}>구독한 매장의 신상품!</Text>
         <ScrollView>
-          {NEW_PRODUCTS.map((product) => (
-            <View key={product.id} style={styles.newProductItemContainer}>
-              <Image
-                source={{ uri: product.imageUrl }}
-                style={styles.newProductItemImage}
-              />
-              <Text style={styles.newProductItemName}>{product.name}</Text>
-            </View>
-          ))}
+          <View style={styles.itemContainer}>
+            {showNewProducts ? (
+              <Text style={styles.newProductsTitle}>
+                구독한 매장의 신상품을 확인해보세요!
+              </Text>
+            ) : (
+              <Text style={styles.newProductsTitle}>
+                내가 찜한 상품을 확인해보세요!
+              </Text>
+            )}
+            {showNewProducts
+              ? NEW_PRODUCTS.map((product) => (
+                  <View key={product.id} style={styles.newProductItemContainer}>
+                    <Image
+                      source={{ uri: product.imageUrl }}
+                      style={styles.newProductItemImage}
+                    />
+                    <Text style={styles.newProductItemName}>
+                      {product.name}
+                    </Text>
+                  </View>
+                ))
+              : [1, 2, 3, 4, 5, 6].map((a, i) => {
+                  return (
+                    <ItemCard
+                      key={i}
+                      url="https://ifh.cc/g/M2TJZp.png"
+                      onPress={() => {
+                        navigation.navigate("Goods", { productId: i });
+                      }}
+                    />
+                  );
+                })}
+          </View>
         </ScrollView>
       </View>
     </View>
@@ -153,6 +195,40 @@ const styles = StyleSheet.create({
   newProductItemName: {
     fontSize: 14,
     fontWeight: "bold",
+  },
+  tabs: {
+    flexDirection: "row",
+    height: 50,
+    width: "90%",
+    marginHorizontal: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  tab: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#d9d9d9",
+    fontSize: 18,
+  },
+  activeTab: {
+    color: "black",
+  },
+  content: {
+    flex: 1,
+  },
+  tabContent: {
+    width: "45%",
+  },
+  itemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    overflow: "auto",
+    flexWrap: "wrap",
   },
 });
 
