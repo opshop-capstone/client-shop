@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,8 +12,9 @@ import {
 import { Card } from "react-native-elements";
 import styled from "styled-components";
 import { Button, CustomButton, Checkbox, Input } from "../components";
-import { ItemContext } from "../contexts";
+import { ItemContext, UserContext } from "../contexts";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
 
 const InputContainer = styled.View`
   width: 80%;
@@ -54,6 +55,38 @@ const StyledButton = styled.Button`
 `;
 
 const EditAddress = ({ navigation }) => {
+  const { user, setUserInfo } = useContext(UserContext);
+  useEffect(() => {
+    console.log(user?.jwt);
+    try {
+      axios({
+        method: "get",
+        url: "http://opshop.shop:3000/opshop/mypage/address",
+        headers: {
+          "x-access-token": `${user?.jwt}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data;
+          console.log("dd");
+          console.log(result);
+          if (result) {
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
   const [showModal, setShowModal] = useState(false);
   const { address, setAddress } = useContext(ItemContext);
   const [recipient, setRecipent] = useState("");
