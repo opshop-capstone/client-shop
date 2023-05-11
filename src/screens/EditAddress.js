@@ -15,6 +15,7 @@ import { Button, CustomButton, Checkbox, Input } from "../components";
 import { ItemContext, UserContext } from "../contexts";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
+import Postcode from "@actbase/react-daum-postcode";
 
 const InputContainer = styled.View`
   width: 80%;
@@ -167,6 +168,7 @@ const EditAddress = ({ navigation }) => {
           <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
             배송지 변경하기
           </StyledText>
+
           <InputContainer>
             <Input
               label="이름 (필수)"
@@ -246,7 +248,7 @@ const EditAddress = ({ navigation }) => {
       </Modal>
       <Modal visible={showModal2} animationType="slide">
         <View style={styles.modalContainer}>
-          <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
+          {/* <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
             배송지 변경하기
           </StyledText>
           <InputContainer>
@@ -286,7 +288,17 @@ const EditAddress = ({ navigation }) => {
               value={detailAddress}
               onChangeText={setDetailAddress}
             />
-          </InputContainer>
+          </InputContainer> */}
+
+          <Postcode
+            style={{ width: 320, height: 320 }}
+            jsOptions={{ animation: true, hideMapBtn: true }}
+            onSelected={(data) => {
+              alert(JSON.stringify(data));
+              setModal(false);
+            }}
+          />
+
           <View style={styles.modalButtonsContainer}>
             <Button
               title="추가"
