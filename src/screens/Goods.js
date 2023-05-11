@@ -61,7 +61,6 @@ const Goods = ({ route, product, navigation }) => {
 
   //상품 상세
   useEffect(() => {
-    console.log(productId);
     try {
       // 상품 상세 api
       axios
@@ -72,7 +71,7 @@ const Goods = ({ route, product, navigation }) => {
           const test = response.data.result;
           const imageArr =
             response.data.result.images[0].product_image.split(",");
-          console.log(imageArr);
+
           if (result) {
             setStoreName(result.store_name);
             setTitle(result.title);
@@ -113,43 +112,12 @@ const Goods = ({ route, product, navigation }) => {
     setShowModal(false);
   };
   const StyledText = styled.Text`
-    font-size: 20px;
+    font-size: 14px;
     color: #111;
     font-weight: 600;
-    margin-bottom: 15px;
+    margin: 10px;
   `;
-  product = {
-    image: "https://m.oldlook.co.kr/web/product/big/ok31400.JPG",
-    shopName: "VINTAGE TALK",
-    productName: "랄프로렌 울 모직 여자M",
-    brandName: "RALPH LAUREN",
-    price: "59,000",
-    description: `
-상품 상세 정보
 
-브랜드 : RALPH LAUREN
-
-상품명 : 모직 블레이저 
-
-수입국가 : JPN
-
-소재 : 울 ( 상품 하단 택 이미지 참조 )
-
-제품 상태 : 제품사진 외에 특별히 오염, 데미지 없는 상태
-
-실측사이즈 단면 (cm)
-
-어깨 : 38 가슴 : 45 소매 : 57 총기장 : 57
-
-사이즈 : 여자 M
-
-브랜드 의류마다 표기사이즈와 실측사이즈가 다르니, 구매전 실측 사이즈를 비교 후 구매하시면 정확한 사이즈를 구매를 할수있습니다. 
-
-사이즈는 재는 방법에 따라 1~2cm 정도 오차가 있을수 있습니다.
-    `,
-  };
-  const { image, shopName, productName, brandName, price, description } =
-    product;
   return (
     <Container>
       <ScrollView>
@@ -157,15 +125,16 @@ const Goods = ({ route, product, navigation }) => {
         <View style={styles.info}>
           <Text style={styles.shopName}>{storeName}</Text>
           <Text style={styles.productName}>{title}</Text>
-          <Text style={styles.brandName}>{brandName}</Text>
-          <Text style={styles.brandName}>
-            {category == "TOP" ? "상의" : "다른거"}
-          </Text>
+          <Text style={styles.brandName}>브랜드이름</Text>
+          <Text style={styles.brandName}>카테고리 : {category}</Text>
           <Text style={styles.description}>{size}</Text>
           <Text style={styles.price}>{productPrice.toLocaleString()} 원</Text>
           <Contour />
+          <StyledText>상품 설명</StyledText>
           <Text style={styles.description}>{content}</Text>
+          <StyledText>상품 디테일컷</StyledText>
         </View>
+
         <Image source={{ uri: `${detailCutUrl}` }} style={styles.detailCut} />
       </ScrollView>
 
@@ -194,18 +163,25 @@ const Goods = ({ route, product, navigation }) => {
             marginLeft: 10,
           }}
           onPress={() => {
-            console.log({ product });
-            handleAddToCart();
-            setCartItems([
-              ...cartItems,
-              {
-                id: cartItems.length + 1,
-                name: title,
-                price: `${productPrice}`,
-                image: `${imageUrl}`,
-              },
-            ]);
-            console.log(cartItems);
+            let duplication = cartItems.findIndex((a) => {
+              console.log(a);
+              return a.name == title;
+            });
+            const addToCart = () => {
+              setCartItems([
+                ...cartItems,
+                {
+                  id: cartItems.length + 1,
+                  name: title,
+                  price: `${productPrice}`,
+                  image: `${imageUrl}`,
+                },
+              ]);
+              handleAddToCart();
+            };
+            duplication == -1
+              ? addToCart()
+              : alert("장바구니에 같은 상품이 존재해요!");
           }}
           title="장바구니에 담기"
         />

@@ -35,6 +35,7 @@ const StyledText = styled.Text`
   font-size: 24px;
   color: #111;
   font-weight: 600;
+  margin: 10px;
 `;
 
 const ButtonIcon = styled(Feather).attrs({
@@ -59,6 +60,7 @@ const Cart = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <StyledText>{cartItems.length}개 상품</StyledText>
       <ScrollView>
         {cartItems.map((item) => (
           <View style={styles.productCard} key={item.id}>

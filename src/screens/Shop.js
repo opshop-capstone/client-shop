@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { UserContext } from "../contexts";
+import { ItemContext, UserContext } from "../contexts";
 import {
   Button,
   CustomButton,
@@ -66,6 +66,7 @@ const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
   const [shopItem, setShopItem] = useState([{ d: "d" }, { b: "d" }]);
 
+  const { testItems, setTestItems } = useContext(ItemContext);
   useEffect(() => {
     try {
       // 상품 상세 api
@@ -77,6 +78,8 @@ const Shop = ({ navigation }) => {
 
           if (result) {
             setShopItem([...result]);
+            setTestItems([...result]);
+            //추천 아이템 연동 전  테스트를 위한 임시 Context
             console.log(shopItem);
           }
         })
@@ -157,6 +160,8 @@ const Shop = ({ navigation }) => {
                     }}
                     url={a.product_thumbnail}
                     productTitle={a.title}
+                    shopName="VINTAGE TALK"
+                    price="39,000원"
                   />
                 );
               })}

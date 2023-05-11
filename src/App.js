@@ -28,6 +28,7 @@ export default function App() {
     // },
   ]);
 
+  const [testItems, setTestItems] = useState([]);
   const [address, setAddress] = useState([
     {
       id: 1,
@@ -46,7 +47,14 @@ export default function App() {
       <UserProvider>
         <CartProvider>
           <ItemContext.Provider
-            value={{ cartItems, setCartItems, address, setAddress }}
+            value={{
+              cartItems,
+              setCartItems,
+              address,
+              setAddress,
+              testItems,
+              setTestItems,
+            }}
           >
             <StatusBar
               backgroundColor={theme.background}

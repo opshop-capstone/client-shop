@@ -6,6 +6,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { ScrollView } from "react-native";
 import axios from "axios";
+import { ItemContext } from "../contexts";
 
 const Container = styled.View`
   flex: 1;
@@ -53,6 +54,35 @@ const sliderTouch = (index) => {
 
 const OpMain = ({ navigation }) => {
   const theme = useContext(ThemeContext);
+  const [shopItem, setShopItem] = useState([]);
+  useEffect(() => {
+    try {
+      // 상품 상세 api
+      axios
+        .get(`http://opshop.shop:3000/opshop/stores/2`)
+
+        .then(function (response) {
+          const result = response.data.result;
+          if (result) {
+            setShopItem(result);
+            // console.log(shopItem[0].product_thumbnail);
+            console.log("shopItem");
+            console.log(shopItem);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
 
   return (
     <Container>
@@ -97,19 +127,17 @@ const OpMain = ({ navigation }) => {
         <BoxContainer>
           <StyledText>박상호님을 위한 맞춤 Pick!</StyledText>
           <ItemContainer>
-            {/* <ItemCard
-              onPress={() => {
-                navigation.navigate("Goods"), { key: 0 };
-              }}
-              url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
-            /> */}
-            {[1, 2, 3, 4, 5, 6].map((a, i) => {
+            {shopItem.map((a, i) => {
               return (
                 <ItemCard
-                  url="https://ifh.cc/g/M2TJZp.png"
+                  key={i}
                   onPress={() => {
-                    navigation.navigate("Goods", { productId: i });
+                    navigation.navigate("Goods", { productId: i + 3 });
                   }}
+                  url={a.product_thumbnail}
+                  productTitle={a.title}
+                  shopName="VINTAGE TALK"
+                  price="39,000원"
                 />
               );
             })}
