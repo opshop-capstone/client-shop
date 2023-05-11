@@ -55,7 +55,7 @@ const PhotoButton = ({ onPress }) => {
   );
 };
 
-const ItemCard = ({ url, style, onPress }) => {
+const ItemCard = ({ url, style, onPress, productTitle, shopName, price }) => {
   return (
     <TouchableOpacity
       style={{
@@ -72,9 +72,9 @@ const ItemCard = ({ url, style, onPress }) => {
         <ProfileImage style={style} source={{ uri: url }} />
         <PhotoButton />
       </ImageContainer>
-      <ItemTitle style={{ fontWeight: 700 }}>상품명</ItemTitle>
-      <ItemTitle>상점명</ItemTitle>
-      <ItemTitle>상품가격</ItemTitle>
+      <ItemTitle style={{ fontWeight: 700 }}>{productTitle}</ItemTitle>
+      <ItemTitle>{shopName}</ItemTitle>
+      <ItemTitle>{price}</ItemTitle>
     </TouchableOpacity>
   );
 };

@@ -64,17 +64,20 @@ const category = [
 ];
 const Shop = ({ navigation }) => {
   const { setUser } = useContext(UserContext);
+  const [shopItem, setShopItem] = useState([{ d: "d" }, { b: "d" }]);
+
   useEffect(() => {
     try {
       // 상품 상세 api
       axios
-        .get(`http://opshop.shop:3000/opshop/products/`)
+        .get(`http://opshop.shop:3000/opshop/stores/2`)
 
         .then(function (response) {
-          const result = response.data;
-          console.log(result);
+          const result = response.data.result;
 
           if (result) {
+            setShopItem([...result]);
+            console.log(shopItem);
           }
         })
         .catch(function (error) {
@@ -133,53 +136,7 @@ const Shop = ({ navigation }) => {
             />
           )}
         />
-        {/* <ScrollView
-          contentContainerStyle={{
-            margin: 25,
-            flexDirection: "row",
-            overflow: "auto",
 
-            justifyContent: "space-between",
-            alignItems: "center",
-            flex: 1,
-          }}
-          horizontal={true}
-        >
-          {[
-            { name: "thumbs-up", title: "인기상품" },
-            { name: "shirt", title: "부위별" },
-            { name: "color-wand", title: "신상품" },
-            { name: "ios-copy", title: "브랜드별" },
-            { name: "ios-glasses", title: "패션잡화" },
-          ].map((a, i) => {
-            return i == categoryKey ? (
-              <CustomButton
-                key={i}
-                containerStyle={{
-                  width: 60, // 원하는 크기로 지정
-                  height: 60,
-                  borderRadius: 8,
-                  backgroundColor: "grey",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#111",
-                }}
-                onPress={() => {}}
-                iconName={a.name}
-                title={a.title}
-              />
-            ) : (
-              <CustomButton
-                key={i}
-                onPress={() => {
-                  setCategoryKey(i);
-                }}
-                iconName={a.name}
-                title={a.title}
-              />
-            );
-          })}
-        </ScrollView> */}
         {categoryKey == 1 && (
           <View>
             <StyledText>매장 인기 상품</StyledText>
@@ -191,14 +148,15 @@ const Shop = ({ navigation }) => {
             url="https://m.oldlook.co.kr/web/product/big/ok31400.JPG"
           /> */}
 
-              {[1, 2, 3, 4, 5, 6].map((a, i) => {
+              {shopItem.map((a, i) => {
                 return (
                   <ItemCard
                     key={i}
                     onPress={() => {
-                      navigation.navigate("Goods", { productId: i });
+                      navigation.navigate("Goods", { productId: i + 3 });
                     }}
-                    url="https://ifh.cc/g/M2TJZp.png"
+                    url={a.product_thumbnail}
+                    productTitle={a.title}
                   />
                 );
               })}
