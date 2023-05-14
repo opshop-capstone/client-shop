@@ -44,7 +44,7 @@ const Profile = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("EditAddress")}
+          onPress={() => navigation.navigate("EditAddress", { orderKey: 0 })}
         >
           <Text style={styles.cardText}>배송지 수정</Text>
           <StyledText>주소와 회원정보를 수정하세요!</StyledText>

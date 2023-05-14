@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const Checkbox = ({ title, def }) => {
+const Checkbox = ({ title, def, onPress }) => {
   const [checked, setChecked] = useState(def ? true : false);
 
-  const handlePress = () => {
-    setChecked(!checked);
-  };
+  const handlePress = () => {};
 
   return (
     <TouchableOpacity
       style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}
-      onPress={handlePress}
+      onPress={() => {
+        onPress();
+
+        handlePress();
+      }}
     >
       <MaterialIcons
         name={checked ? "check-box" : "check-box-outline-blank"}

@@ -55,7 +55,7 @@ const StyledText = styled.Text`
 
 const Order = ({ navigation }) => {
   const { cartItems, setCartItems } = useContext(ItemContext);
-
+  const { address, setAddress } = useContext(ItemContext);
   let sum = 0;
 
   cartItems.map((item) => {
@@ -101,11 +101,19 @@ const Order = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <StyledText>상점명</StyledText>
+        <StyledText>구매 상품</StyledText>
         <Card containerStyle={styles.card}>
-          <Card.Title style={styles.cardTitle}>{shop.store}</Card.Title>
+          <Card.Title style={styles.cardTitle}>
+            {cartItems[0].name} 외 {cartItems.length - 1}개
+          </Card.Title>
           <Card.Divider />
-          <Text style={styles.cardText}>{shop.storeDescription}</Text>
+          {cartItems.map((a, i) => {
+            return (
+              <Text style={styles.cardText}>
+                {a.name} - {parseInt(a.price).toLocaleString()}원
+              </Text>
+            );
+          })}
         </Card>
         <TotalPrice>
           <StyledText>결제수단</StyledText>
@@ -135,21 +143,21 @@ const Order = ({ navigation }) => {
           </View>
         </Card>
         <TotalPrice>
-          <StyledText>배송</StyledText>
+          <StyledText>배송 (기본 배송지로 설정됩니다!)</StyledText>
           <TouchableOpacity
             onPress={() => {
-              handleAddToCart();
+              navigation.navigate("EditAddress", { orderKey: 1 });
             }}
           >
             <ButtonIcon />
           </TouchableOpacity>
         </TotalPrice>
         <Card containerStyle={styles.card}>
-          <Card.Title style={styles.cardTitle}>본가</Card.Title>
+          <Card.Title style={styles.cardTitle}>
+            {address[0].addressName}
+          </Card.Title>
           <Card.Divider />
-          <Text style={styles.cardText}>
-            인천광역시 미추홀구 주승로 96번길 42 주안한신휴플러스 201동, 407호
-          </Text>
+          <Text style={styles.cardText}>{address[0].address} </Text>
         </Card>
         <Card containerStyle={(styles.card, { marginTop: 1 })}>
           <View

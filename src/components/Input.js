@@ -44,12 +44,14 @@ const Input = forwardRef(
       returnKeyType,
       maxLength,
       isPassword,
+      containerStyle,
+      focusOn,
     },
     ref
   ) => {
     const [isFocused, setIsFocused] = useState(0);
     return (
-      <Container>
+      <Container containerStyle={containerStyle}>
         <Label isFocused={isFocused}>{label}</Label>
         <StyledInput
           ref={ref}
@@ -67,8 +69,11 @@ const Input = forwardRef(
           autoCorrect={false}
           textContentType="none"
           isFocused={isFocused}
-          onFocus={() => {
+          focusOn={() => {
             setIsFocused(true);
+            {
+              focusOn;
+            }
           }}
           secureTextEntry={isPassword}
         />

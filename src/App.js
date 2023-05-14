@@ -32,13 +32,18 @@ export default function App() {
   const [address, setAddress] = useState([
     {
       id: 1,
+      zipcode: "22563",
       addressName: "본가",
+      is_main: "Y",
       address:
-        "인천광역시 미추홀구 주승로 96번길 42 주안한신휴플러스 201동, 407호",
+        "인천광역시 미추홀구 주승로 96번길 42, 주안한신휴플러스 201동 407호",
     },
     {
       id: 2,
       addressName: "학교",
+      zipcode: "22563",
+      is_main: "N",
+
       address: "용인시 수지구 죽전로 152, 단국대학교",
     },
   ]);

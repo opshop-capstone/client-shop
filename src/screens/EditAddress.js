@@ -9,9 +9,15 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import { Card } from "react-native-elements";
+import { Card, SocialIcon } from "react-native-elements";
 import styled from "styled-components";
-import { Button, CustomButton, Checkbox, Input } from "../components";
+import {
+  Button,
+  CustomButton,
+  Checkbox,
+  Input,
+  ButtonNoFlex,
+} from "../components";
 import { ItemContext, UserContext } from "../contexts";
 import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
@@ -55,7 +61,8 @@ const StyledButton = styled.Button`
   color: white;
 `;
 
-const EditAddress = ({ navigation }) => {
+const EditAddress = ({ navigation, route }) => {
+  const orderKey = route.params.orderKey;
   const { user, setUserInfo } = useContext(UserContext);
   useEffect(() => {
     console.log(user?.jwt);
@@ -97,6 +104,7 @@ const EditAddress = ({ navigation }) => {
   const [shippingAddress, setShippingAddress] = useState("");
   const [detailAddress, setDetailAddress] = useState("");
   const [addressNumber, setAddressNumber] = useState(0);
+  const [postCode, setPostCode] = useState(false);
 
   const handleEditModalOpen = () => {
     setShowModal(true);
@@ -117,6 +125,26 @@ const EditAddress = ({ navigation }) => {
   const editAddress = () => {
     setAddress();
   };
+  const getAddressData = (data) => {
+    let defaultAddress = ""; // 기본주소
+    if (data.buildingName === "N") {
+      defaultAddress = data.apartment;
+    } else {
+      defaultAddress = data.buildingName;
+    }
+    console.log(data);
+    setShippingAddress(data.address + "," + defaultAddress);
+    setZipcode(data.zonecode);
+
+    setPostCode(false);
+
+    // navigation.goBack();
+    // route.params.onSelect({
+    //   zone_code: data.zonecode,
+    //   default_address: data.address + " " + defaultAddress,
+    // });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -141,7 +169,10 @@ const EditAddress = ({ navigation }) => {
               <TotalPrice
                 onPress={() => {
                   setAddressNumber(i);
-
+                  const splitAddress = item.address.split(",");
+                  setAddressNickname(item.addressName);
+                  setShippingAddress(splitAddress[0]);
+                  setDetailAddress(splitAddress[1]);
                   handleEditModalOpen();
                 }}
               >
@@ -149,10 +180,30 @@ const EditAddress = ({ navigation }) => {
                 <ButtonIcon />
               </TotalPrice>
               <Card.Divider />
+              <Text style={styles.cardText}>{item.zipcode} </Text>
               <Text style={styles.cardText}>{item.address} </Text>
+
               <Checkbox
                 title="해당 배송지를 기본 배송지로"
+                // def={item.is_main == "Y" ? 1 : 0}
                 def={i == 0 ? 1 : 0}
+                onPress={() => {
+                  address.map((a, i) => {
+                    if (a.is_main == "Y") {
+                      a.is_main = "N";
+                    }
+                  });
+                  item.is_main = "Y";
+                  setAddress([...address]);
+                  console.log(address);
+
+                  // 배열 순서 바꾸는 방식으로 기본 배송지
+                  let tmp = item;
+                  address[i] = address[0];
+                  address[0] = tmp;
+                  setAddress([...address]);
+                  console.log(address);
+                }}
               />
             </Card>
           );
@@ -163,13 +214,24 @@ const EditAddress = ({ navigation }) => {
         title="배송지 추가하기"
         containerStyle={styles.button}
       />
+      {orderKey == 1 ? (
+        <Button
+          onPress={() => {
+            navigation.goBack();
+          }}
+          title="주문화면으로 돌아가기"
+          containerStyle={styles.orderBackButton}
+          textStyle={{ color: "black", textDecorationLine: "underline" }}
+        />
+      ) : (
+        <></>
+      )}
       <Modal visible={showModal} animationType="slide">
-        <View style={styles.modalContainer}>
-          <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
-            배송지 변경하기
-          </StyledText>
-
-          <InputContainer>
+        <ScrollView>
+          <View style={styles.modalContainer}>
+            <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
+              배송지 변경하기
+            </StyledText>
             <Input
               label="이름 (필수)"
               placeholder="수령인"
@@ -187,71 +249,125 @@ const EditAddress = ({ navigation }) => {
               placeholder="'-'는 제외하고 입력해주세요"
               value={phoneNumber}
               onChangeText={setPhoneNumber}
-            />
-            <Input
-              label="우편 번호 (필수)"
-              placeholder="22231  "
-              value={zipcode}
-              onChangeText={setZipcode}
-            />
-            <Input
-              label="주소 (필수)"
-              placeholder="판교역로 166, 분당 주공, 백현동 53"
-              value={shippingAddress}
-              onChangeText={setShippingAddress}
-            />
-            <Input
-              label="상세 주소 (필수)"
-              placeholder="아파트 동과 호수  "
-              value={detailAddress}
-              onChangeText={setDetailAddress}
             />
 
             {/* <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: 35,
+              }}
+            >
+              <Input
+                onFocus={() => {}}
+                label="우편번호"
+                value={zipcode}
+                placeholder="우편번호"
+                containerStyle={{ width: 300 }}
+              />
+
+              <ButtonNoFlex
+                textStyle={{ fontSize: 16 }}
+                containerStyle={{ height: 40 }}
+                title="주소찾기"
+                onPress={() => {
+                  setPostCode(true);
+                }}
+              />
+            </View> */}
+            {postCode == true ? (
+              <Postcode
+                style={{ width: "100%", height: 320 }}
+                jsOptions={{ animation: true, hideMapBtn: true }}
+                onSelected={(data) => {
+                  getAddressData(data);
+                }}
+              />
+            ) : (
+              <View
                 style={{
-                  marginTop: 20,
                   flexDirection: "row",
                   justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingHorizontal: 35,
                 }}
               >
-                <TextInput style={{ borderWidth: 1, flex: 1, marginRight: 10 }} />
-                <StyledButton title="주소찾기" />
-              </View> */}
-          </InputContainer>
-          <View style={styles.modalButtonsContainer}>
-            <Button
-              title="변경"
-              onPress={() => {
-                address[addressNumber] = {
-                  id: addressNumber,
-                  addressName: addressNickname,
-                  address: shippingAddress + "," + detailAddress,
-                };
-                setAddress([...address]);
-                handleModalClose();
-              }}
-            />
-            <Button
-              title="취소"
-              containerStyle={{
-                backgroundColor: "#fff",
-                borderWidth: 1,
-                borderColor: "#000",
-              }}
-              textStyle={{ color: "#111" }}
-              onPress={() => {
-                handleModalClose();
-              }}
-            />
+                <Input
+                  onFocus={() => {}}
+                  label="우편번호"
+                  value={zipcode}
+                  placeholder="우편번호"
+                  containerStyle={{ width: 300 }}
+                />
+
+                <ButtonNoFlex
+                  textStyle={{ fontSize: 16 }}
+                  containerStyle={{ height: 40 }}
+                  title="주소찾기"
+                  onPress={() => {
+                    setPostCode(true);
+                  }}
+                />
+              </View>
+            )}
+
+            {shippingAddress == false ? (
+              <></>
+            ) : (
+              <>
+                <Input
+                  label="주소 (필수)"
+                  placeholder="판교역로 166, 분당 주공, 백현동 53"
+                  value={shippingAddress}
+                  onChangeText={setShippingAddress}
+                />
+                <Input
+                  label="상세 주소 ( ',' 은 입력하지 말아주세요 ) (필수)"
+                  placeholder="아파트 동과 호수  "
+                  value={detailAddress}
+                  onChangeText={setDetailAddress}
+                />
+              </>
+            )}
+
+            <View style={styles.modalButtonsContainer}>
+              <Button
+                title="변경"
+                onPress={() => {
+                  address[addressNumber] = {
+                    id: addressNumber,
+                    zipcode: zipcode,
+                    addressName: addressNickname,
+                    address: shippingAddress + "," + detailAddress,
+                  };
+                  setAddress([...address]);
+                  console.log(address);
+                  handleModalClose();
+                }}
+              />
+              <Button
+                title="취소"
+                containerStyle={{
+                  backgroundColor: "#fff",
+                  borderWidth: 1,
+                  borderColor: "#000",
+                }}
+                textStyle={{ color: "#111" }}
+                onPress={() => {
+                  handleModalClose();
+                }}
+              />
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
       <Modal visible={showModal2} animationType="slide">
-        <View style={styles.modalContainer}>
-          {/* <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
-            배송지 변경하기
-          </StyledText>
-          <InputContainer>
+        <ScrollView>
+          <View style={styles.modalContainer}>
+            <StyledText style={{ fontSize: 20, fontWeight: "bold" }}>
+              배송지 추가하기
+            </StyledText>
             <Input
               label="이름 (필수)"
               placeholder="수령인"
@@ -270,64 +386,120 @@ const EditAddress = ({ navigation }) => {
               value={phoneNumber}
               onChangeText={setPhoneNumber}
             />
-            <Input
-              label="우편 번호 (필수)"
-              placeholder="22231  "
-              value={zipcode}
-              onChangeText={setZipcode}
-            />
-            <Input
-              label="주소 (필수)"
-              placeholder="판교역로 166, 분당 주공, 백현동 53"
-              value={shippingAddress}
-              onChangeText={setShippingAddress}
-            />
-            <Input
-              label="상세 주소 (필수)"
-              placeholder="아파트 동과 호수  "
-              value={detailAddress}
-              onChangeText={setDetailAddress}
-            />
-          </InputContainer> */}
 
-          <Postcode
-            style={{ width: 320, height: 320 }}
-            jsOptions={{ animation: true, hideMapBtn: true }}
-            onSelected={(data) => {
-              alert(JSON.stringify(data));
-              setModal(false);
-            }}
-          />
+            {/* <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                paddingHorizontal: 35,
+              }}
+            >
+              <Input
+                onFocus={() => {}}
+                label="우편번호"
+                value={zipcode}
+                placeholder="우편번호"
+                containerStyle={{ width: 300 }}
+              />
 
-          <View style={styles.modalButtonsContainer}>
-            <Button
-              title="추가"
-              onPress={() => {
-                setAddress([
-                  ...address,
-                  {
-                    id: address.length + 1,
-                    addressName: addressNickname,
-                    address: shippingAddress + "," + detailAddress,
-                  },
-                ]);
-                console.log(address);
-              }}
-            />
-            <Button
-              title="취소"
-              containerStyle={{
-                backgroundColor: "#fff",
-                borderWidth: 1,
-                borderColor: "#000",
-              }}
-              textStyle={{ color: "#111" }}
-              onPress={() => {
-                handleContinueShopping2();
-              }}
-            />
+              <ButtonNoFlex
+                textStyle={{ fontSize: 16 }}
+                containerStyle={{ height: 40 }}
+                title="주소찾기"
+                onPress={() => {
+                  setPostCode(true);
+                }}
+              />
+            </View> */}
+            {postCode == true ? (
+              <Postcode
+                style={{ width: "100%", height: 320, marginTop: 10 }}
+                jsOptions={{ animation: true, hideMapBtn: true }}
+                onSelected={(data) => {
+                  getAddressData(data);
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  paddingHorizontal: 35,
+                }}
+              >
+                <Input
+                  onFocus={() => {}}
+                  label="우편번호"
+                  value={zipcode}
+                  placeholder="우편번호"
+                  containerStyle={{ width: 300 }}
+                />
+
+                <ButtonNoFlex
+                  textStyle={{ fontSize: 16 }}
+                  containerStyle={{ height: 40 }}
+                  title="주소찾기"
+                  onPress={() => {
+                    setPostCode(true);
+                  }}
+                />
+              </View>
+            )}
+
+            {shippingAddress == false ? (
+              <></>
+            ) : (
+              <>
+                <Input
+                  label="주소 (필수)"
+                  placeholder="판교역로 166, 분당 주공, 백현동 53"
+                  value={shippingAddress}
+                  onChangeText={setShippingAddress}
+                />
+                <Input
+                  label="상세 주소 ( ',' 은 입력하지 말아주세요 ) (필수)"
+                  placeholder="아파트 동과 호수  "
+                  value={detailAddress}
+                  onChangeText={setDetailAddress}
+                />
+              </>
+            )}
+
+            <View style={styles.modalButtonsContainer}>
+              <Button
+                title="추가"
+                onPress={() => {
+                  setAddress([
+                    ...address,
+                    {
+                      id: address.length + 1,
+                      zipcode: zipcode,
+                      addressName: addressNickname,
+                      address: shippingAddress + "," + detailAddress,
+                    },
+                  ]);
+                  handleContinueShopping2();
+
+                  console.log(address);
+                }}
+              />
+              <Button
+                title="취소"
+                containerStyle={{
+                  backgroundColor: "#fff",
+                  borderWidth: 1,
+                  borderColor: "#000",
+                }}
+                textStyle={{ color: "#111" }}
+                onPress={() => {
+                  handleContinueShopping2();
+                }}
+              />
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </Modal>
     </View>
   );
@@ -356,8 +528,6 @@ const styles = StyleSheet.create({
     color: "grey",
   },
   button: {
-    marginTop: 20,
-    marginBottom: 20,
     marginHorizontal: 30,
   },
   image: {
@@ -368,6 +538,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
+    padding: 30,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -378,6 +549,23 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 10,
     elevation: 5,
+  },
+  zipcodeInput: {
+    height: 40,
+    borderColor: "#a6a6a6",
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    borderRightWidth: 0,
+    borderBottomWidth: 1,
+    flex: 1,
+    marginRight: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
+  orderBackButton: {
+    backgroundColor: "#f1f1f1",
+    margin: 0,
+    borderColor: "black",
   },
 });
 

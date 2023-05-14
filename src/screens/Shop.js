@@ -62,7 +62,9 @@ const category = [
   { id: 5, name: "ios-glasses", title: "패션잡화" },
   { id: 6, name: "ios-glasses", title: "패션잡화" },
 ];
-const Shop = ({ navigation }) => {
+const Shop = ({ navigation, route }) => {
+  const storeId = route.params.storeId;
+
   const { setUser } = useContext(UserContext);
   const [shopItem, setShopItem] = useState([{ d: "d" }, { b: "d" }]);
 
@@ -71,7 +73,7 @@ const Shop = ({ navigation }) => {
     try {
       // 상품 상세 api
       axios
-        .get(`http://opshop.shop:3000/opshop/stores/2`)
+        .get(`http://opshop.shop:3000/opshop/stores/${storeId}`)
 
         .then(function (response) {
           const result = response.data.result;
@@ -96,7 +98,56 @@ const Shop = ({ navigation }) => {
       };
     }
   }, []);
-  useEffect(() => {}, [categoryKey]);
+  // stores info 테스트
+  // useEffect(() => {
+  //   try {
+  //     // 상품 상세 api
+  //     axios
+  //       .get(`http://opshop.shop:3000/opshop/stores/2`)
+
+  //       .then(function (response) {
+  //         const result = response;
+
+  //         console.log("result");
+  //         if (result) {
+  //           console.log(result);
+  //         }
+  //       })
+  //       .catch(function (error) {
+  //         console.log(error);
+  //         alert(error);
+  //       });
+  //   } catch (e) {
+  //     console.log(e);
+  //     alert(e);
+  //   } finally {
+  //     return () => {
+  //       isMount = false;
+  //     };
+  //   }
+  // }, []);
+
+  // 동시에 받아오기
+  // useEffect(() => {
+  //   axios
+  //     .all(
+  //       [
+  //         axios.get("http://opshop.shop:3000/opshop/stores/2"),
+  //         axios.get("http://opshop.shop:3000/opshop/stores/2/info"),
+  //       ].then(
+  //         axios.spread((response1, response2) => {
+  //           const result = response1.data.result;
+
+  //           if (result) {
+  //             setShopItem([...result]);
+  //             // setTestItems([...result]);
+  //             console.log(response1, response2);
+  //           }
+  //         })
+  //       )
+  //     )
+  //     .catch((err) => console.log(err));
+  // }, []);
 
   const [categoryKey, setCategoryKey] = useState(1);
   return (

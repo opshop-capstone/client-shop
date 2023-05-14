@@ -132,7 +132,7 @@ const OpMain = ({ navigation }) => {
                 <ItemCard
                   key={i}
                   onPress={() => {
-                    navigation.navigate("Goods", { productId: i + 3 });
+                    navigation.navigate("Goods", { productId: i + 4 });
                   }}
                   url={a.product_thumbnail}
                   productTitle={a.title}
