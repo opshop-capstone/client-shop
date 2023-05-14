@@ -93,13 +93,13 @@ const SubscribeShop = () => {
           style={[styles.tab, showNewProducts && styles.activeTab]}
           onPress={() => setShowNewProducts(true)}
         >
-          New Products
+          신상품
         </Text>
         <Text
           style={[styles.tab, !showNewProducts && styles.activeTab]}
           onPress={() => setShowNewProducts(false)}
         >
-          Favorite Items
+          찜한 상품
         </Text>
       </View>
 

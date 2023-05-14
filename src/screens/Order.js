@@ -109,7 +109,7 @@ const Order = ({ navigation }) => {
           <Card.Divider />
           {cartItems.map((a, i) => {
             return (
-              <Text style={styles.cardText}>
+              <Text key={i} style={styles.cardText}>
                 {a.name} - {parseInt(a.price).toLocaleString()}원
               </Text>
             );

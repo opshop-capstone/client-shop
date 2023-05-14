@@ -11,11 +11,13 @@ import {
   Order,
   OrderHistory,
   EditAddress,
+  SearchPage,
 } from "../screens";
 import { IconButton, Image } from "../components";
 import Home from "./Home";
 import MyPage from "./MyPage";
 import { Button } from "react-native";
+import { Input } from "react-native-elements";
 
 const Stack = createStackNavigator();
 const Container = styled.View`
@@ -25,13 +27,13 @@ const Container = styled.View`
 const LogoTitle = () => {
   return (
     <Image
-      style={{ width: 80, height: 20, borderRadius: 0, overflow: "cover" }}
+      style={{ width: 80, height: 20, borderRadius: 0 }}
       url="https://ifh.cc/g/M2TJZp.png"
       // source={require("../../assets/LogoTitle.png")}
     />
   );
 };
-const Main = ({ navigation }) => {
+const Main = () => {
   const theme = useContext(ThemeContext);
   return (
     <Stack.Navigator
@@ -46,22 +48,28 @@ const Main = ({ navigation }) => {
       <Stack.Screen
         name="Home"
         component={Home}
-        options={{
-          title: "Main",
+        options={({ navigation }) => ({
+          title: "MyPage",
           headerTitle: () => <LogoTitle />,
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="search"
+                onPress={() => navigation.navigate("SearchPage")}
+              />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="PopularShop"
         component={PopularShop}
-        options={{
+        options={({ navigation }) => ({
           tabBarStyle: { display: undefined },
           title: "Main",
           headerTitle: () => <LogoTitle />,
@@ -69,115 +77,150 @@ const Main = ({ navigation }) => {
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="Shop"
         component={Shop}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
-          headerTitle: "VINTAGE TALK",
+          headerTitle: "상점",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="Goods"
         component={Goods}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
-          headerTitle: "VINTAGE TALK",
+          headerTitle: "상품",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="Cart"
         component={Cart}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
           headerTitle: "장바구니",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="Order"
         component={Order}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
           headerTitle: "주문하기",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       {/* <Stack.Screen
         name="MyPage"
         component={MyPage}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
           headerTitle: "주문하기",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       /> */}
       <Stack.Screen
         name="OrderHistory"
         component={OrderHistory}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
           headerTitle: "주문 내역 확인",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="EditAddress"
         component={EditAddress}
-        options={{
+        options={({ navigation }) => ({
           title: "Main",
           headerTitle: "회원 정보 수정",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
               <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton name="cart" onPress={() => alert("test")} />
+              <IconButton
+                name="cart"
+                onPress={() => navigation.navigate("Cart")}
+              />
             </Container>
           ),
-        }}
+        })}
+      />
+      <Stack.Screen
+        name="SearchPage"
+        component={SearchPage}
+        options={({ navigation }) => ({
+          headerRight: () => (
+            <Container>
+              <Input></Input>
+            </Container>
+          ),
+        })}
       />
     </Stack.Navigator>
   );

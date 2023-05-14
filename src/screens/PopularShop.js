@@ -125,6 +125,7 @@ const PopularShop = ({ route, navigation }) => {
             {popularShop.map((a, i) => {
               return (
                 <ShopCard
+                  key={i}
                   image={a.store_image_url}
                   title={a.store_name}
                   description="description"
@@ -138,9 +139,10 @@ const PopularShop = ({ route, navigation }) => {
         )}
 
         {categoryKey == 1 &&
-          [1, 2, 3, 4, 5, 6].map(() => {
+          [1, 2, 3, 4, 5, 6].map((a, i) => {
             return (
               <ShopCard
+                key={i}
                 image="https://ifh.cc/g/M2TJZp.png"
                 title="상점명"
                 description="description"

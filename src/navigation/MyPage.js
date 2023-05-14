@@ -35,17 +35,17 @@ const MyPage = () => {
       <Stack.Screen
         name="Profile"
         component={Profile}
-        options={{
+        options={({ navigation }) => ({
           title: "MyPage",
           headerTitle: () => <LogoTitle />,
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
+              <IconButton name="search" />
               <IconButton name="cart" onPress={() => alert("test")} />
             </Container>
           ),
-        }}
+        })}
       />
       <Stack.Screen
         name="OrderHistory"
