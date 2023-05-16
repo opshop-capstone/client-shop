@@ -19,7 +19,7 @@ import {
   Button,
 } from "../components";
 import styled from "styled-components";
-import { CartContext, ItemContext } from "../contexts";
+import { CartContext, ItemContext, UserContext } from "../contexts";
 
 const LowContainer = styled.View`
   position: fixed;
@@ -58,7 +58,31 @@ const Goods = ({ route, product, navigation }) => {
   const [category, setCategory] = useState("");
   const { cartItems, setCartItems } = useContext(ItemContext);
   const { cart, setCart } = useContext(CartContext);
+  const { user, setUserInfo } = useContext(UserContext);
 
+  const AddToCartHandler = () => {
+    axios({
+      method: "post",
+      url: `http://opshop.shop:3000/opshop/carts/add`,
+      // url:
+      //   `http://opshop.shop:3000/opshop/carts/add?productId=` + { productId },
+      headers: {
+        "x-access-token": `${user?.jwt}`,
+      },
+      params: {
+        productId: productId,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        console.log(err.name);
+        console.log(err.stack);
+        alert("담기 실패");
+      });
+  };
   //상품 상세
   useEffect(() => {
     try {
@@ -178,6 +202,7 @@ const Goods = ({ route, product, navigation }) => {
                 },
               ]);
               handleAddToCart();
+              AddToCartHandler();
             };
             duplication == -1
               ? addToCart()

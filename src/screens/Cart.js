@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import styled from "styled-components";
 import { Button } from "../components";
-import { ItemContext } from "../contexts";
+import { ItemContext, UserContext } from "../contexts";
 import { Feather } from "@expo/vector-icons";
+import axios from "axios";
+import { CheckBox } from "react-native-elements";
 
 const FixContainer = styled.View`
   position: fixed;
@@ -46,31 +48,100 @@ const ButtonIcon = styled(Feather).attrs({
 `;
 
 const Cart = ({ navigation }) => {
+  const [remove, setRemove] = useState(false);
   const { cartItems, setCartItems } = useContext(ItemContext);
+  const removeItem = (product_id) => {
+    axios({
+      method: "post",
+      url: `http://opshop.shop:3000/opshop/carts/remove?productId=
+         ${product_id} `,
+      headers: {
+        "x-access-token": `${user?.jwt}`,
+      },
+    })
+      .then((response) => {
+        console.log("상품번호" + product_id);
+
+        const updatedCartItems = cartItems.filter(
+          (item) => item.product_id !== product_id
+        );
+        setCartItems(updatedCartItems);
+        setRemove(!remove);
+        // console.log(cartItems);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        console.log(err.name);
+        console.log(err.stack);
+        alert("remove 실패");
+      });
+  };
+
+  // 카트에 있는 상품 로드
+  const { user, setUserInfo } = useContext(UserContext);
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: "http://opshop.shop:3000/opshop/carts",
+        headers: {
+          "x-access-token": `${user?.jwt}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data.result;
+
+          if (result) {
+            // console.log("removeItem 할때마다 로드 :" + result);
+            setCartItems(result);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, [remove]);
+
   let sum = 0;
 
   cartItems.map((item) => {
     sum += parseFloat(item.price);
   });
 
-  const removeItem = (id) => {
-    const updatedCartItems = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCartItems);
-  };
+  // const removeItem = (id) => {
+  //   const updatedCartItems = cartItems.filter((item) => item.id !== id);
+  //   setCartItems(updatedCartItems);
+  // };
 
   return (
     <View style={styles.container}>
       <StyledText>{cartItems.length}개 상품</StyledText>
       <ScrollView>
         {cartItems.map((item) => (
-          <View style={styles.productCard} key={item.id}>
-            <Image source={{ uri: item.image }} style={styles.productImage} />
+          <View style={styles.productCard} key={item.product_id}>
+            <Image source={{ uri: item.url }} style={styles.productImage} />
             <View style={styles.productDetails}>
-              <Text style={styles.productName}>{item.name}</Text>
-              <Text style={styles.productPrice}>{`${item.price}원`}</Text>
+              <Text style={styles.productName}>{item.title}</Text>
+              <Text style={styles.productPrice}>{`${parseInt(
+                item.price
+              ).toLocaleString()}원`}</Text>
+              <CheckBox title="선택" />
             </View>
             <TouchableOpacity
-              onPress={() => removeItem(item.id)}
+              onPress={() => {
+                console.log(item);
+                console.log(item.product_id);
+                removeItem(item.product_id);
+              }}
               style={styles.deleteButton}
             >
               <ButtonIcon />
@@ -87,7 +158,7 @@ const Cart = ({ navigation }) => {
         <Button
           title="주문하기"
           onPress={() => {
-            navigation.navigate("Order");
+            navigation.navigate("Order", { sum: sum });
           }}
         ></Button>
       </FixContainer>

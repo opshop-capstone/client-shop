@@ -1,13 +1,22 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 
-const ShopCard = ({ onPress, image, title, description }) => {
+const ShopCard = ({
+  onPress,
+  image,
+  title,
+  description,
+  contactInformation,
+  tel,
+}) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <Image source={{ uri: image }} style={styles.image} />
       <View style={styles.info}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
+        <Text style={styles.description}>{contactInformation}</Text>
+        <Text style={styles.description}>{tel}</Text>
       </View>
     </TouchableOpacity>
   );

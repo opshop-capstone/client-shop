@@ -11,8 +11,10 @@ import {
 import { Card } from "react-native-elements";
 import styled from "styled-components";
 import { Button, CustomButton } from "../components";
-import { ItemContext } from "../contexts";
+import { ItemContext, UserContext } from "../contexts";
 import { Ionicons } from "@expo/vector-icons";
+import axios from "axios";
+import * as Linking from "expo-linking";
 
 const FixContainer = styled.View`
   position: fixed;
@@ -46,6 +48,7 @@ const CheckButtonIcon = styled(Ionicons).attrs({
   color: green;
 `;
 
+const AddToCartHandler = () => {};
 const StyledText = styled.Text`
   font-size: 18px;
   color: #111;
@@ -53,11 +56,18 @@ const StyledText = styled.Text`
   margin: 5px;
 `;
 
-const Order = ({ navigation }) => {
+const Order = ({ navigation, route }) => {
+  const total_price = route.params.sum;
   const { cartItems, setCartItems } = useContext(ItemContext);
   const { address, setAddress } = useContext(ItemContext);
-  let sum = 0;
+  const { user, setUserInfo } = useContext(UserContext);
 
+  const link = (url) => {
+    Linking.openURL(url);
+  };
+
+  //상품 총합 계산
+  let sum = 0;
   cartItems.map((item) => {
     sum += parseFloat(item.price);
   });
@@ -78,9 +88,7 @@ const Order = ({ navigation }) => {
   };
   const [showModal2, setShowModal2] = useState(false);
 
-  const handleAddToCart2 = () => {
-    setShowModal2(true);
-  };
+  const handleAddToCart2 = () => {};
 
   const handleMoveToCart2 = () => {
     console.log("Navigating to Cart");
@@ -98,19 +106,132 @@ const Order = ({ navigation }) => {
     shippingMethod: "Standard",
   });
 
+  const itemIdArr = [];
+  cartItems.map((a, i) => {
+    itemIdArr.push(a.product_id);
+  });
+
+  const itemPriceArr = [];
+  cartItems.map((a, i) => {
+    itemPriceArr.push(a.price);
+  });
+
+  const [addressID, setAddressId] = useState(1);
+  const data = {
+    // itemId: itemIdArr.join(),
+    // addressId: 1,
+    // //addressId 주소 API에 없음
+    // item_price: itemPriceArr.join(),
+    // quantity: cartItems.length,
+    // total_price: total_price,
+    // itemId: `${itemIdArr.join()}`,
+    // addressId: `${addressID}`,
+    // //addressId 주소 API에 없음
+    // item_price: `${itemPriceArr.join()}`,
+    // quantity: `${cartItems.length}`,
+    // total_price: `${total_price}`,
+  };
+  console.log(data);
+  const handleOrder = () => {
+    axios({
+      method: "post",
+      url: `http://opshop.shop:3000/opshop/payment`,
+      headers: {
+        "x-access-token": `${user?.jwt}`,
+      },
+      params: {
+        ///////버전 1
+        itemId: itemIdArr.join(),
+        addressId: 1,
+        //addressId 주소 API에 없음
+        itemPrice: itemPriceArr.join(),
+        quantity: cartItems.length,
+        totalPrice: total_price,
+        ///////버전 2
+        // itemId: `${itemIdArr.join()}`,
+        // addressId: `${addressID}`,
+        // //addressId 주소 API에 없음
+        // item_price: `${itemPriceArr.join()}`,
+        // quantity: `${cartItems.length}`,
+        // total_price: `${total_price}`,
+        ///////버전 3
+        // itemId: `${itemIdArr}`,
+        // addressId: `${addressID}`,
+        // //addressId 주소 API에 없음
+        // item_price: `${itemPriceArr}`,
+        // quantity: `${cartItems.length}`,
+        // total_price: `${total_price}`,
+        ///////버전 4
+        // itemId: itemIdArr,
+        // addressId: addressID,
+        // //addressId 주소 API에 없음
+        // item_price: `${itemPriceArr}`,
+        // quantity: `${cartItems.length}`,
+        // total_price: `${total_price}`,
+      },
+    })
+      .then((response) => {
+        if (response) {
+          console.log(response);
+          console.log(response.data);
+          link(response.data);
+        } else {
+          alert("Error", response.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        console.log(err.name);
+        console.log(err.stack);
+
+        alert("주문하기 실패");
+      });
+    setShowModal2(true);
+  };
+
+  // const handleOrder = () => {
+  //   //상품 하나만 받아올때
+  //   axios({
+  //     method: "post",
+  //     url: `http://opshop.shop:3000/opshop/payment`,
+  //     headers: {
+  //       "x-access-token": `${user?.jwt}`,
+  //     },
+  //     data: {
+  //       itemId: "1",
+  //       addressId: 1,
+  //       //addressId 주소 API에 없음
+  //       item_price: "2000",
+  //       quantity: cartItems.length,
+  //       total_price: total_price,
+  //     },
+  //   })
+  //     .then((response) => {
+  //       console.log(response);
+  //       console.log(response.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //       console.log(err.name);
+  //       console.log(err.stack);
+
+  //       alert("주문하기 실패");
+  //     });
+  //   setShowModal2(true);
+  // };
   return (
     <View style={styles.container}>
       <ScrollView>
         <StyledText>구매 상품</StyledText>
         <Card containerStyle={styles.card}>
           <Card.Title style={styles.cardTitle}>
-            {cartItems[0].name} 외 {cartItems.length - 1}개
+            {cartItems[0].title} 외 {cartItems.length - 1}개
           </Card.Title>
           <Card.Divider />
           {cartItems.map((a, i) => {
             return (
               <Text key={i} style={styles.cardText}>
-                {a.name} - {parseInt(a.price).toLocaleString()}원
+                {a.title} - {parseInt(a.price).toLocaleString()}원
               </Text>
             );
           })}
@@ -153,11 +274,11 @@ const Order = ({ navigation }) => {
           </TouchableOpacity>
         </TotalPrice>
         <Card containerStyle={styles.card}>
-          <Card.Title style={styles.cardTitle}>
-            {address[0].addressName}
-          </Card.Title>
+          <Card.Title style={styles.cardTitle}>{address[0].name}</Card.Title>
           <Card.Divider />
-          <Text style={styles.cardText}>{address[0].address} </Text>
+          <Text style={styles.cardText}>
+            {address[0].road_address} , {address[0].detail_address}{" "}
+          </Text>
         </Card>
         <Card containerStyle={(styles.card, { marginTop: 1 })}>
           <View
@@ -192,7 +313,7 @@ const Order = ({ navigation }) => {
         </Card>
       </ScrollView>
       <Button
-        onPress={handleAddToCart2}
+        onPress={handleOrder}
         title="주문하기"
         containerStyle={styles.button}
       />

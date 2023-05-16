@@ -39,6 +39,7 @@ const LowContainer = styled.View`
 
 const PopularShop = ({ route, navigation }) => {
   const [popularShop, setPopularShop] = useState([]);
+  const [categoryShop, setCategoryShop] = useState([]);
   useEffect(() => {
     try {
       // 왜 response.data.result값이 undefined가 오는거지
@@ -48,7 +49,34 @@ const PopularShop = ({ route, navigation }) => {
         .then(function (response) {
           const result = response.data.result;
           if (result) {
+            console.log(result);
             setPopularShop(result);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
+  useEffect(() => {
+    try {
+      // 왜 response.data.result값이 undefined가 오는거지
+      axios
+        .get("http://opshop.shop:3000/opshop/category")
+
+        .then(function (response) {
+          const result = response.data.result;
+          if (result) {
+            console.log(result);
           }
         })
         .catch(function (error) {
@@ -130,7 +158,10 @@ const PopularShop = ({ route, navigation }) => {
                   title={a.store_name}
                   description="description"
                   onPress={() => {
-                    navigation.navigate("Shop", { storeId: i + 2 });
+                    navigation.navigate("Shop", {
+                      storeId: a.id,
+                      store_image_url: a.store_image_url,
+                    });
                   }}
                 />
               );

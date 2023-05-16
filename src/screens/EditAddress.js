@@ -64,37 +64,7 @@ const StyledButton = styled.Button`
 const EditAddress = ({ navigation, route }) => {
   const orderKey = route.params.orderKey;
   const { user, setUserInfo } = useContext(UserContext);
-  useEffect(() => {
-    console.log(user?.jwt);
-    try {
-      axios({
-        method: "get",
-        url: "http://opshop.shop:3000/opshop/mypage/address",
-        headers: {
-          "x-access-token": `${user?.jwt}`,
-        },
-      })
-        .then(function (response) {
-          const result = response.data;
-          console.log("dd");
-          console.log(result);
-          if (result) {
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-          console.log("error");
-          alert(error);
-        });
-    } catch (e) {
-      console.log(e);
-      alert(e);
-    } finally {
-      return () => {
-        isMount = false;
-      };
-    }
-  }, []);
+
   const [showModal, setShowModal] = useState(false);
   const { address, setAddress } = useContext(ItemContext);
   const [recipient, setRecipent] = useState("");
@@ -119,12 +89,85 @@ const EditAddress = ({ navigation, route }) => {
     setShowModal2(true);
   };
 
+  const [adding, setAdding] = useState(false);
+  const postAddress = (name, road_address, detail_address, zipcode) => {
+    console.log({
+      name: name,
+      zipcode: zipcode,
+      road_address: road_address,
+      detail_address: detail_address,
+      is_main: "N",
+    });
+    axios({
+      method: "post",
+      url: `http://opshop.shop:3000/opshop/mypage/address`,
+      headers: {
+        "x-access-token": `${user?.jwt}`,
+      },
+      data: {
+        name: name,
+        zipcode: zipcode,
+        road_address: road_address,
+        detail_address: detail_address,
+        is_main: "N",
+        // name: `${name}`,
+        // zipcode: `${zipcode}`,
+        // road_address: `${road_address}`,
+        // detail_address: `${detail_address}`,
+        // is_main: "N",
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
+        setAdding(!adding);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        console.log(err.name);
+        console.log(err.stack);
+
+        alert("추가 실패");
+      });
+  };
+
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: "http://opshop.shop:3000/opshop/mypage/address",
+        headers: {
+          "x-access-token": `${user?.jwt}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data.result;
+
+          if (result) {
+            console.log("result");
+            console.log(result);
+            // setAddress([...address, result]);
+            // console.log(address);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, [adding]);
   const handleContinueShopping2 = () => {
     setShowModal2(false);
   };
-  const editAddress = () => {
-    setAddress();
-  };
+
   const getAddressData = (data) => {
     let defaultAddress = ""; // 기본주소
     if (data.buildingName === "N") {
@@ -165,23 +208,24 @@ const EditAddress = ({ navigation, route }) => {
         <StyledText>배송지</StyledText>
         {address.map((item, i) => {
           return (
-            <Card containerStyle={styles.card}>
+            <Card containerStyle={styles.card} key={i}>
               <TotalPrice
                 onPress={() => {
                   setAddressNumber(i);
-                  const splitAddress = item.address.split(",");
-                  setAddressNickname(item.addressName);
-                  setShippingAddress(splitAddress[0]);
-                  setDetailAddress(splitAddress[1]);
+                  setAddressNickname(item.name);
+                  setShippingAddress(item.road_address);
+                  setDetailAddress(item.detail_address);
                   handleEditModalOpen();
                 }}
               >
-                <Text style={styles.cardTitle}>{item.addressName}</Text>
+                <Text style={styles.cardTitle}>{item.name}</Text>
                 <ButtonIcon />
               </TotalPrice>
               <Card.Divider />
               <Text style={styles.cardText}>{item.zipcode} </Text>
-              <Text style={styles.cardText}>{item.address} </Text>
+              <Text style={styles.cardText}>
+                {item.road_address + " ," + item.detail_address}{" "}
+              </Text>
 
               <Checkbox
                 title="해당 배송지를 기본 배송지로"
@@ -338,8 +382,9 @@ const EditAddress = ({ navigation, route }) => {
                   address[addressNumber] = {
                     id: addressNumber,
                     zipcode: zipcode,
-                    addressName: addressNickname,
-                    address: shippingAddress + "," + detailAddress,
+                    name: addressNickname,
+                    road_address: shippingAddress,
+                    detail_address: detailAddress,
                   };
                   setAddress([...address]);
                   console.log(address);
@@ -471,13 +516,20 @@ const EditAddress = ({ navigation, route }) => {
               <Button
                 title="추가"
                 onPress={() => {
+                  postAddress(
+                    addressNickname,
+                    zipcode,
+                    shippingAddress,
+                    detailAddress
+                  );
                   setAddress([
                     ...address,
                     {
                       id: address.length + 1,
                       zipcode: zipcode,
-                      addressName: addressNickname,
-                      address: shippingAddress + "," + detailAddress,
+                      name: addressNickname,
+                      road_address: shippingAddress,
+                      detail_address: detailAddress,
                     },
                   ]);
                   handleContinueShopping2();

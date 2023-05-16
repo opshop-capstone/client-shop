@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled, { ThemeContext } from "styled-components";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { Image, IconButton, ItemCard, CustomButton } from "../components";
 import { SliderBox } from "react-native-image-slider-box";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { ScrollView } from "react-native";
 import axios from "axios";
-import { ItemContext } from "../contexts";
+import { ItemContext, UserContext } from "../contexts";
+import { Text } from "react-native";
 
 const Container = styled.View`
   flex: 1;
@@ -55,14 +56,21 @@ const sliderTouch = (index) => {
 const OpMain = ({ navigation }) => {
   const theme = useContext(ThemeContext);
   const [shopItem, setShopItem] = useState([]);
+  const [state, setState] = useState({
+    currentIndex: 1,
+  });
+  const { user, setUserInfo } = useContext(UserContext);
+  const { address, setAddress } = useContext(ItemContext);
+
   useEffect(() => {
     try {
       // 상품 상세 api
       axios
-        .get(`http://opshop.shop:3000/opshop/stores/2`)
+        .get(`http://opshop.shop:3000/opshop/products`)
 
         .then(function (response) {
           const result = response.data.result;
+          console.log(result);
           if (result) {
             setShopItem(result);
             // console.log(shopItem[0].product_thumbnail);
@@ -83,11 +91,85 @@ const OpMain = ({ navigation }) => {
       };
     }
   }, []);
-
+  useEffect(() => {
+    try {
+      axios({
+        method: "get",
+        url: "http://opshop.shop:3000/opshop/mypage/address",
+        headers: {
+          "x-access-token": `${user?.jwt}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data.result;
+          console.log(result);
+          if (result) {
+            console.log("result");
+            setAddress([...address, result]);
+            console.log(address);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
   return (
     <Container>
       <ScrollView>
-        <SliderBox
+        <View style={{ width: "100%", height: "30%", flex: 1 }}>
+          <SliderBox
+            images={[
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfDcI_0jxpFkyyTTJLScppbfluqc6VB_MdEw&usqp=CAU",
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSPLnqrA3M61JMMEkL2b3dvyYSJuwo5UkMgg&usqp=CAU",
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcaEucQHS70XZxXNOMNashZcMpuDWG_nAQJg&usqp=CAU",
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB-VJYZTX_fNSe78o5U0g7qIsWXt5gHbF0DQ&usqp=CAU",
+            ]}
+            onCurrentImagePressed={(index) => {
+              console.log("image pressed index : " + index);
+              sliderTouch(index);
+            }}
+            currentImageEmitter={(index) => {
+              // 이미지가 바뀔때 어떤 동작을 할지 설정
+              setState({
+                currentIndex: index + 1,
+              });
+            }}
+            dotColor="rgba(0,0,0,0)"
+            inactiveDotColor="rgba(0,0,0,0)"
+            resizeMode="cover"
+            autoplay
+            circleLoop
+          />
+          <View
+            style={{
+              position: "absolute",
+              bottom: "8%",
+              right: 0,
+              paddingTop: 4,
+              paddingRight: 6,
+              paddingBottom: 4,
+              paddingLeft: 10,
+              borderTopLeftRadius: 14,
+              borderBottomLeftRadius: 14,
+              backgroundColor: "rgba(0,0,0,0.6)",
+            }}
+          >
+            <Text style={{ fontSize: 10, color: "#ffffff" }}>
+              {state.currentIndex}/4
+            </Text>
+          </View>
+        </View>
+        {/* <SliderBox
           images={[
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfDcI_0jxpFkyyTTJLScppbfluqc6VB_MdEw&usqp=CAU",
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSPLnqrA3M61JMMEkL2b3dvyYSJuwo5UkMgg&usqp=CAU",
@@ -98,9 +180,12 @@ const OpMain = ({ navigation }) => {
             console.log("image pressed index : " + index);
             sliderTouch(index);
           }}
+          dotColor="rgba(0,0,0,0)"
+          inactiveDotColor="rgba(0,0,0,0)"
+          resizeMode="cover"
           autoplay
           circleLoop
-        />
+        /> */}
         <BoxContainer>
           <LowContainer>
             {[
@@ -132,12 +217,12 @@ const OpMain = ({ navigation }) => {
                 <ItemCard
                   key={i}
                   onPress={() => {
-                    navigation.navigate("Goods", { productId: i + 4 });
+                    navigation.navigate("Goods", { productId: a.product_id });
                   }}
-                  url={a.product_thumbnail}
+                  url={a.thumbnail}
                   productTitle={a.title}
-                  shopName="VINTAGE TALK"
-                  price="39,000원"
+                  shopName={a.store_name}
+                  price={a.price.toLocaleString() + "원"}
                 />
               );
             })}
