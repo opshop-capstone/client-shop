@@ -117,25 +117,11 @@ const Order = ({ navigation, route }) => {
   });
 
   const [addressID, setAddressId] = useState(1);
-  const data = {
-    // itemId: itemIdArr.join(),
-    // addressId: 1,
-    // //addressId 주소 API에 없음
-    // item_price: itemPriceArr.join(),
-    // quantity: cartItems.length,
-    // total_price: total_price,
-    // itemId: `${itemIdArr.join()}`,
-    // addressId: `${addressID}`,
-    // //addressId 주소 API에 없음
-    // item_price: `${itemPriceArr.join()}`,
-    // quantity: `${cartItems.length}`,
-    // total_price: `${total_price}`,
-  };
-  console.log(data);
-  const handleOrder = () => {
-    axios({
+
+  const handleOrder = async () => {
+    await axios({
       method: "post",
-      url: `http://opshop.shop:3000/opshop/payment`,
+      url: "http://opshop.shop:3000/opshop/payment",
       headers: {
         "x-access-token": `${user?.jwt}`,
       },
@@ -143,34 +129,13 @@ const Order = ({ navigation, route }) => {
         ///////버전 1
         itemId: itemIdArr.join(),
         addressId: 1,
-        //addressId 주소 API에 없음
         itemPrice: itemPriceArr.join(),
         quantity: cartItems.length,
         totalPrice: total_price,
-        ///////버전 2
-        // itemId: `${itemIdArr.join()}`,
-        // addressId: `${addressID}`,
-        // //addressId 주소 API에 없음
-        // item_price: `${itemPriceArr.join()}`,
-        // quantity: `${cartItems.length}`,
-        // total_price: `${total_price}`,
-        ///////버전 3
-        // itemId: `${itemIdArr}`,
-        // addressId: `${addressID}`,
-        // //addressId 주소 API에 없음
-        // item_price: `${itemPriceArr}`,
-        // quantity: `${cartItems.length}`,
-        // total_price: `${total_price}`,
-        ///////버전 4
-        // itemId: itemIdArr,
-        // addressId: addressID,
-        // //addressId 주소 API에 없음
-        // item_price: `${itemPriceArr}`,
-        // quantity: `${cartItems.length}`,
-        // total_price: `${total_price}`,
       },
     })
       .then((response) => {
+        console.log(response.data);
         if (response) {
           console.log(response);
           console.log(response.data);
