@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { UserContext } from "../contexts";
-import { validateEmail, removeWhitespace } from "../utils";
+import { validateEmail, removeWhitespace, validateCeoNumber } from "../utils";
 import axios from "axios";
 
 const Container = styled.View`
@@ -40,11 +40,12 @@ const Signin = ({ navigation }) => {
   }, [email, password, errorMessage]);
 
   //이메일 공백 제거와 이메일 형식 검사
-  const _handleEmailChange = (email) => {
-    const changedEmail = removeWhitespace(email);
-    setEmail(changedEmail);
+  const _handleCeoNumber = (email) => {
+    const changedCeoNumber = removeWhitespace(email);
+    setEmail(changedCeoNumber);
+    console.log(validateCeoNumber(changedCeoNumber));
     setErrorMessage(
-      validateEmail(changedEmail) ? "" : "정확한 이메일 형식으로 입력해주세요."
+      validateCeoNumber(changedCeoNumber) ? "" : "정확한 형식으로 입력해주세요."
     );
   };
   const _handlePasswordChange = (password) => {
@@ -54,29 +55,30 @@ const Signin = ({ navigation }) => {
 
   const _handleSigninBtnPress = async () => {
     setTimeout(async () => {
-      await axios
-        .post("http://opshop.shop:3000/opshop/login", {
-          email: `${email}`,
-          password: `${password}`,
-        })
-        .then((response) => {
-          console.log(response.data);
-          console.log(email);
-          if (response.data.result) {
-            const userId = response.data.result.userId;
-            const jwt = response.data.result.jwt;
-            const userEmail = email;
-            setUserInfo({ userId, userEmail, jwt });
-          } else {
-            alert("Error", response.data.message);
-          }
-        })
-        .catch((err) => {
-          console.log(err.message);
-          console.log(err.name);
-          console.log(err.stack);
-          alert("로그인 실패");
-        });
+      // await axios
+      //   .post("http://opshop.shop:3000/opshop/login", {
+      //     email: `${email}`,
+      //     password: `${password}`,
+      //   })
+      //   .then((response) => {
+      //     console.log(response.data);
+      //     console.log(email);
+      //     if (response.data.result) {
+      //       const userId = response.data.result.userId;
+      //       const jwt = response.data.result.jwt;
+      //       const userEmail = email;
+      //       setUserInfo({ userId, userEmail, jwt });
+      //     } else {
+      //       alert("Error", response.data.message);
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err.message);
+      //     console.log(err.name);
+      //     console.log(err.stack);
+      //     alert("로그인 실패");
+      //   });
+      setUserInfo({ jwt: "111" });
     }, 1000);
   };
 
@@ -97,15 +99,15 @@ const Signin = ({ navigation }) => {
           url="https://ifh.cc/g/M2TJZp.png"
         />
         <StyledText style={{ fontSize: 28, fontWeight: 500 }}>
-          빈티지 아이콘,
+          OP Shop,
         </StyledText>
-        <StyledText>구제통합 OP Shop</StyledText>
+        <StyledText>사업자 로그인</StyledText>
         <Input
-          label="이메일"
-          placeholder="aaaaa@email.com"
+          label="사업자 번호"
+          placeholder="사업자 번호 10자리를 '-' 없이 입력해주세요"
           returnKeyType="next"
           value={email}
-          onChangeText={_handleEmailChange}
+          onChangeText={_handleCeoNumber}
           onSubmitEditing={() => {
             refPassword.current.focus();
           }}
@@ -119,21 +121,16 @@ const Signin = ({ navigation }) => {
           onChangeText={_handlePasswordChange}
           isPassword={true}
         />
-        <ErrorMessage message={errorMessage} />
         <Button
-          title="비회원으로 둘러보기"
+          title="비밀번호를 잊으셨나요?"
           onPress={() => {
-            setUserInfo({ jwt: "111" });
+            navigation.navigate("비밀번호찾기");
           }}
           containerStyle={{
             marginTop: 0,
             backgroundColor: "#fff",
           }}
-          textStyle={{
-            color: "#5d5d5d",
-            fontSize: 20,
-            textDecorationLine: "underline",
-          }}
+          textStyle={{ color: "#5d5d5d", fontSize: 20 }}
         />
         <Button
           title="로그인"
@@ -153,17 +150,6 @@ const Signin = ({ navigation }) => {
             backgroundColor: "#fff",
           }}
           textStyle={{ color: "#111" }}
-        />
-        <Button
-          title="비밀번호를 잊으셨나요?"
-          onPress={() => {
-            navigation.navigate("비밀번호찾기");
-          }}
-          containerStyle={{
-            marginTop: 0,
-            backgroundColor: "#fff",
-          }}
-          textStyle={{ color: "#5d5d5d", fontSize: 20 }}
         />
       </Container>
     </KeyboardAwareScrollView>

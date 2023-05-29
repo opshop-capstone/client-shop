@@ -5,7 +5,7 @@ import Profile from "./Profile";
 import OpMain from "./OpMain";
 import SubscribeShop from "./SubscribeShop";
 import Cart from "./Cart";
-import PopularShop from "./PopularShop";
+import AddItem from "./AddItem";
 import Shop from "./Shop";
 import Goods from "./Goods";
 import Order from "./Order";
@@ -21,7 +21,7 @@ export {
   OpMain,
   SubscribeShop,
   Cart,
-  PopularShop,
+  AddItem,
   Shop,
   Goods,
   Order,

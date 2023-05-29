@@ -1,236 +1,140 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled, { ThemeContext } from "styled-components";
-import { FlatList, View } from "react-native";
-import { Image, IconButton, ItemCard, CustomButton } from "../components";
-import { SliderBox } from "react-native-image-slider-box";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { ScrollView } from "react-native";
-import axios from "axios";
-import { ItemContext, UserContext } from "../contexts";
-import { Text } from "react-native";
+import React, { useState, useContext } from "react";
+import { UserContext } from "../contexts";
+import { Button, Input } from "../components";
+import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
+import styled from "styled-components/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const Container = styled.View`
   flex: 1;
-  flex-grow: 1;
-  padding: 10px;
-  background-color: ${({ theme }) => theme.background};
-`;
-const BoxContainer = styled.View`
-  flex: 1;
-  padding: 10px;
-  margin: 5px;
-  background-color: ${({ theme }) => theme.background};
-`;
-const Contour = styled.View`
-  border-bottom-width: 2px;
-  border-color: ${({ theme }) => theme.imgBackground};
-  margin: 6px;
-`;
-const LowContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  overflow: auto;
-  flex-wrap: wrap;
-`;
-
-const ItemContainer = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  overflow: auto;
-  flex-wrap: wrap;
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const StyledText = styled.Text`
-  font-size: 24px;
-  color: #111;
-  font-weight: 600;
-  margin-bottom: 15px;
+  margin-top: 3px;
+  font-size: 14px;
+  color: grey;
 `;
 
-const sliderTouch = (index) => {
-  alert(index + 1 + "번째 슬라이드");
-};
-
 const OpMain = ({ navigation }) => {
-  const theme = useContext(ThemeContext);
-  const [shopItem, setShopItem] = useState([]);
-  const [state, setState] = useState({
-    currentIndex: 1,
-  });
   const { user, setUserInfo } = useContext(UserContext);
-  const { address, setAddress } = useContext(ItemContext);
-
-  useEffect(() => {
-    try {
-      // 상품 상세 api
-      axios
-        .get(`http://opshop.shop:3000/opshop/products`)
-
-        .then(function (response) {
-          const result = response.data.result;
-          console.log(result);
-          if (result) {
-            setShopItem(result);
-            // console.log(shopItem[0].product_thumbnail);
-            console.log("shopItem");
-            console.log(shopItem);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-          alert(error);
-        });
-    } catch (e) {
-      console.log(e);
-      alert(e);
-    } finally {
-      return () => {
-        isMount = false;
-      };
-    }
-  }, []);
-  useEffect(() => {
-    try {
-      axios({
-        method: "get",
-        url: "http://opshop.shop:3000/opshop/mypage/address",
-        headers: {
-          "x-access-token": `${user?.jwt}`,
-        },
-      })
-        .then(function (response) {
-          const result = response.data.result;
-          console.log(result);
-          if (result) {
-            console.log("result");
-            setAddress([...address, result]);
-            console.log(address);
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-          console.log("error");
-          alert(error);
-        });
-    } catch (e) {
-      console.log(e);
-      alert(e);
-    } finally {
-      return () => {
-        isMount = false;
-      };
-    }
-  }, []);
   return (
     <Container>
-      <ScrollView>
-        <View style={{ width: "100%", height: "30%", flex: 1 }}>
-          <SliderBox
-            images={[
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfDcI_0jxpFkyyTTJLScppbfluqc6VB_MdEw&usqp=CAU",
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSPLnqrA3M61JMMEkL2b3dvyYSJuwo5UkMgg&usqp=CAU",
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcaEucQHS70XZxXNOMNashZcMpuDWG_nAQJg&usqp=CAU",
-              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB-VJYZTX_fNSe78o5U0g7qIsWXt5gHbF0DQ&usqp=CAU",
-            ]}
-            onCurrentImagePressed={(index) => {
-              console.log("image pressed index : " + index);
-              sliderTouch(index);
-            }}
-            currentImageEmitter={(index) => {
-              // 이미지가 바뀔때 어떤 동작을 할지 설정
-              setState({
-                currentIndex: index + 1,
-              });
-            }}
-            dotColor="rgba(0,0,0,0)"
-            inactiveDotColor="rgba(0,0,0,0)"
-            resizeMode="cover"
-            autoplay
-            circleLoop
+      <View style={styles.header}>
+        <View style={styles.profile}>
+          <Image
+            source={require("../../assets/icon.png")}
+            style={styles.profileImg}
           />
-          <View
-            style={{
-              position: "absolute",
-              bottom: "8%",
-              right: 0,
-              paddingTop: 4,
-              paddingRight: 6,
-              paddingBottom: 4,
-              paddingLeft: 10,
-              borderTopLeftRadius: 14,
-              borderBottomLeftRadius: 14,
-              backgroundColor: "rgba(0,0,0,0.6)",
-            }}
-          >
-            <Text style={{ fontSize: 10, color: "#ffffff" }}>
-              {state.currentIndex}/4
-            </Text>
-          </View>
         </View>
-        {/* <SliderBox
-          images={[
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfDcI_0jxpFkyyTTJLScppbfluqc6VB_MdEw&usqp=CAU",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSPLnqrA3M61JMMEkL2b3dvyYSJuwo5UkMgg&usqp=CAU",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcaEucQHS70XZxXNOMNashZcMpuDWG_nAQJg&usqp=CAU",
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTB-VJYZTX_fNSe78o5U0g7qIsWXt5gHbF0DQ&usqp=CAU",
-          ]}
-          onCurrentImagePressed={(index) => {
-            console.log("image pressed index : " + index);
-            sliderTouch(index);
-          }}
-          dotColor="rgba(0,0,0,0)"
-          inactiveDotColor="rgba(0,0,0,0)"
-          resizeMode="cover"
-          autoplay
-          circleLoop
-        /> */}
-        <BoxContainer>
-          <LowContainer>
-            {[
-              { name: "flame", title: "인기상점" },
-              { name: "location", title: "지역별" },
-              { name: "apps", title: "카테고리" },
-              { name: "star", title: "인기상품" },
-              { name: "heart", title: "찜한상품" },
-            ].map((a, i) => {
-              return (
-                <CustomButton
-                  key={i}
-                  onPress={() => {
-                    navigation.navigate("PopularShop", { key: i });
-                  }}
-                  iconName={a.name}
-                  title={a.title}
-                />
-              );
-            })}
-          </LowContainer>
-        </BoxContainer>
-        <Contour />
-        <BoxContainer>
-          <StyledText>박상호님을 위한 맞춤 Pick!</StyledText>
-          <ItemContainer>
-            {shopItem.map((a, i) => {
-              return (
-                <ItemCard
-                  key={i}
-                  onPress={() => {
-                    navigation.navigate("Goods", { productId: a.product_id });
-                  }}
-                  url={a.thumbnail}
-                  productTitle={a.title}
-                  shopName={a.store_name}
-                  price={a.price.toLocaleString() + "원"}
-                />
-              );
-            })}
-          </ItemContainer>
-        </BoxContainer>
-      </ScrollView>
+        <View style={styles.profileInfo}>
+          <Text style={styles.name}>TEST SHOP</Text>
+          <Text style={styles.email}>{user.userEmail}</Text>
+        </View>
+      </View>
+      <View style={styles.cardContainer}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("OrderHistory")}
+        >
+          <Text style={styles.cardText}>주문 관리</Text>
+          <StyledText>주문된 상품을 관리</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate("AddItem")}
+        >
+          <Text style={styles.cardText}>상품 관리</Text>
+          <StyledText>전체 상품 리스트 노출 / 미노출 및 판매 관리</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log(user.userEmail)}
+        >
+          <Text style={styles.cardText}>고객 관리</Text>
+          <StyledText>전체 고객 관리</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log("나의 후기")}
+        >
+          <Text style={styles.cardText}>문의 및 후기 관리</Text>
+          <StyledText>고객 상품 문의 및 후기 확인</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log("My Inquiry")}
+        >
+          <Text style={styles.cardText}>통계</Text>
+          <StyledText>방문/가입/구매 등 운영 내역 및 통계확인</StyledText>
+        </TouchableOpacity>
+      </View>
+
+      <Button title="로그아웃" onPress={() => setUserInfo({ userIdx: "" })} />
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 20,
+    marginHorizontal: 15,
+  },
+  profile: {
+    borderWidth: 1,
+    borderRadius: 50,
+    overflow: "hidden",
+  },
+  profileImg: {
+    width: 50,
+    height: 50,
+  },
+  profileInfo: {
+    alignItems: "flex-end",
+  },
+  name: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  email: {
+    fontSize: 14,
+    color: "#666",
+  },
+  cardContainer: {
+    width: "90%",
+    flex: 1,
+    marginHorizontal: 15,
+  },
+  card: {
+    marginTop: 10,
+    borderRadius: 5,
+    backgroundColor: "white",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginBottom: 10,
+  },
+  cardText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});
 
 export default OpMain;

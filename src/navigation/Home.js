@@ -29,7 +29,7 @@ const Home = () => {
             TabIcon({ name: focused ? "home" : "home-outline", focused }),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="    "
         component={Cart}
         options={{
@@ -44,7 +44,7 @@ const Home = () => {
           tabBarIcon: ({ focused }) =>
             TabIcon({ name: focused ? "heart" : "heart-outline", focused }),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="     "
         component={Profile}

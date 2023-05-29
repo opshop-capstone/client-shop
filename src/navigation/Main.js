@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import {
   Profile,
   OpMain,
-  PopularShop,
+  AddItem,
   Shop,
   Goods,
   Cart,
@@ -67,12 +67,12 @@ const Main = () => {
         })}
       />
       <Stack.Screen
-        name="PopularShop"
-        component={PopularShop}
+        name="AddItem"
+        component={AddItem}
         options={({ navigation }) => ({
           tabBarStyle: { display: undefined },
           title: "Main",
-          headerTitle: () => <LogoTitle />,
+          headerTitle: "상품 추가",
           headerRight: () => (
             <Container>
               <IconButton name="menu" onPress={() => alert("test")} />
