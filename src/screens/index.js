@@ -12,6 +12,8 @@ import Order from "./Order";
 import OrderHistory from "./OrderHistory";
 import EditAddress from "./EditAddress";
 import SearchPage from "./SearchPage";
+import OrderDetail from "./OrderDetail";
+import ProductManager from "./ProductManager";
 
 export {
   Signin,
@@ -28,4 +30,6 @@ export {
   OrderHistory,
   EditAddress,
   SearchPage,
+  OrderDetail,
+  ProductManager,
 };

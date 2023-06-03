@@ -50,7 +50,10 @@ const Home = () => {
         component={Profile}
         options={{
           tabBarIcon: ({ focused }) =>
-            TabIcon({ name: focused ? "person" : "person-outline", focused }),
+            TabIcon({
+              name: focused ? "settings" : "settings-outline",
+              focused,
+            }),
         }}
       />
     </Tab.Navigator>

@@ -12,6 +12,9 @@ import Checkbox from "./Checkbox";
 import ErrorMessage from "./ErrorMessage";
 import StoreCard from "./StoreCard";
 import ItemAddImage from "./ItemAddImage";
+import ContentInput from "./ContentInput";
+import ColorfulText from "./ColorfulText";
+import Spinner from "./Spinner";
 
 export {
   Button,
@@ -27,4 +30,7 @@ export {
   ErrorMessage,
   StoreCard,
   ItemAddImage,
+  ContentInput,
+  ColorfulText,
+  Spinner,
 };

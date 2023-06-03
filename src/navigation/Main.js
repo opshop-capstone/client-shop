@@ -12,18 +12,31 @@ import {
   OrderHistory,
   EditAddress,
   SearchPage,
+  OrderDetail,
+  ProductManager,
 } from "../screens";
 import { IconButton, Image } from "../components";
 import Home from "./Home";
 import MyPage from "./MyPage";
-import { Button } from "react-native";
+import { Button, Text } from "react-native";
+import { Fontisto } from "@expo/vector-icons";
 import { Input } from "react-native-elements";
 
 const Stack = createStackNavigator();
 const Container = styled.View`
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 20px;
   background-color: ${({ theme }) => theme.background};
 `;
+
+const StyledText = styled.Text`
+  font-size: 15px;
+  color: #111;
+  font-weight: bold;
+`;
+
 const LogoTitle = () => {
   return (
     <Image
@@ -53,15 +66,10 @@ const Main = () => {
           headerTitle: () => <LogoTitle />,
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton
-                name="search"
-                onPress={() => navigation.navigate("SearchPage")}
-              />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -75,12 +83,10 @@ const Main = () => {
           headerTitle: "상품 추가",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -93,12 +99,10 @@ const Main = () => {
           headerTitle: "상점",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -111,12 +115,10 @@ const Main = () => {
           headerTitle: "상품",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -129,12 +131,10 @@ const Main = () => {
           headerTitle: "장바구니",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -147,12 +147,10 @@ const Main = () => {
           headerTitle: "주문하기",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -164,13 +162,9 @@ const Main = () => {
           title: "Main",
           headerTitle: "주문하기",
           headerRight: () => (
-            <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+             <Container>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style = {{marginLeft : 10}}>판매자용 서비스</StyledText>
             </Container>
           ),
         })}
@@ -183,12 +177,10 @@ const Main = () => {
           headerTitle: "주문 내역 확인",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -201,12 +193,10 @@ const Main = () => {
           headerTitle: "회원 정보 수정",
           headerRight: () => (
             <Container>
-              <IconButton name="menu" onPress={() => alert("test")} />
-              <IconButton name="search" onPress={() => alert("test")} />
-              <IconButton
-                name="cart"
-                onPress={() => navigation.navigate("Cart")}
-              />
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}
@@ -217,7 +207,42 @@ const Main = () => {
         options={({ navigation }) => ({
           headerRight: () => (
             <Container>
-              <Input></Input>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
+            </Container>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="OrderDetail"
+        component={OrderDetail}
+        options={({ navigation }) => ({
+          title: "Main",
+          headerTitle: "주문 상세 정보",
+          headerRight: () => (
+            <Container>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
+            </Container>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="ProductManager"
+        component={ProductManager}
+        options={({ navigation }) => ({
+          title: "Main",
+          headerTitle: "상품관리",
+          headerRight: () => (
+            <Container>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
             </Container>
           ),
         })}

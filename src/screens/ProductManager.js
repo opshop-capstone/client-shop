@@ -18,37 +18,31 @@ const StyledText = styled.Text`
   color: grey;
 `;
 
-const Profile = ({ navigation }) => {
+const ProductManager = ({ navigation }) => {
   const { user, setUserInfo } = useContext(UserContext);
   return (
     <Container>
-      <View style={styles.header}>
-        <View style={styles.profileInfo}>
-          <Text style={styles.name}>상점을 개설하거나 추가 할 수 있어요!</Text>
-        </View>
-      </View>
       <View style={styles.cardContainer}>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("OrderHistory")}
+          onPress={() => navigation.navigate("AddItem")}
         >
-          <Text style={styles.cardText}>상점 개설</Text>
-          <StyledText>
-            기존 상점이 존재하지 않는 판매자는 해당 탭을 클릭 하세요!
-          </StyledText>
+          <Text style={styles.cardText}>상품 추가</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("EditAddress", { orderKey: 0 })}
+          onPress={() => navigation.navigate("AddItem")}
         >
-          <Text style={styles.cardText}>상점 추가</Text>
-          <StyledText>
-            기존 상점이 존재하는 판매자는 해당 탭을 클릭 하세요!
-          </StyledText>
+          <Text style={styles.cardText}>상품 수정</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => console.log("나의 후기")}
+        >
+          <Text style={styles.cardText}>상품 삭제</Text>
         </TouchableOpacity>
       </View>
-
-      <Button title="로그아웃" onPress={() => setUserInfo({ userIdx: "" })} />
     </Container>
   );
 };
@@ -113,4 +107,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default ProductManager;

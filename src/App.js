@@ -8,6 +8,7 @@ import {
   ItemContext,
   CartProvider,
   UserContext,
+  ProgressProvider,
 } from "./contexts";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -86,26 +87,28 @@ export default function App() {
   ]);
   return (
     <ThemeProvider theme={theme}>
-      <UserProvider>
-        <CartProvider>
-          <ItemContext.Provider
-            value={{
-              cartItems,
-              setCartItems,
-              address,
-              setAddress,
-              testItems,
-              setTestItems,
-            }}
-          >
-            <StatusBar
-              backgroundColor={theme.background}
-              barStyle="dark-content"
-            />
-            <Navigation />
-          </ItemContext.Provider>
-        </CartProvider>
-      </UserProvider>
+      <ProgressProvider>
+        <UserProvider>
+          <CartProvider>
+            <ItemContext.Provider
+              value={{
+                cartItems,
+                setCartItems,
+                address,
+                setAddress,
+                testItems,
+                setTestItems,
+              }}
+            >
+              <StatusBar
+                backgroundColor={theme.background}
+                barStyle="dark-content"
+              />
+              <Navigation />
+            </ItemContext.Provider>
+          </CartProvider>
+        </UserProvider>
+      </ProgressProvider>
     </ThemeProvider>
   );
 }

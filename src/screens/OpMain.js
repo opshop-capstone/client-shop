@@ -18,6 +18,14 @@ const StyledText = styled.Text`
   color: grey;
 `;
 
+const ItemContainer = styled.View`
+  margin: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  flex-wrap: wrap;
+`;
 const OpMain = ({ navigation }) => {
   const { user, setUserInfo } = useContext(UserContext);
   return (
@@ -44,7 +52,7 @@ const OpMain = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("AddItem")}
+          onPress={() => navigation.navigate("ProductManager")}
         >
           <Text style={styles.cardText}>상품 관리</Text>
           <StyledText>전체 상품 리스트 노출 / 미노출 및 판매 관리</StyledText>
@@ -53,8 +61,8 @@ const OpMain = ({ navigation }) => {
           style={styles.card}
           onPress={() => console.log(user.userEmail)}
         >
-          <Text style={styles.cardText}>고객 관리</Text>
-          <StyledText>전체 고객 관리</StyledText>
+          <Text style={styles.cardText}>상점 관리</Text>
+          <StyledText>상점 정보를 변경 / 관리</StyledText>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
@@ -71,8 +79,6 @@ const OpMain = ({ navigation }) => {
           <StyledText>방문/가입/구매 등 운영 내역 및 통계확인</StyledText>
         </TouchableOpacity>
       </View>
-
-      <Button title="로그아웃" onPress={() => setUserInfo({ userIdx: "" })} />
     </Container>
   );
 };

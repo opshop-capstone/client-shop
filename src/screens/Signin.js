@@ -3,7 +3,7 @@ import { Button, Image, Input, ErrorMessage } from "../components";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { UserContext } from "../contexts";
+import { ProgressContext, UserContext } from "../contexts";
 import { validateEmail, removeWhitespace, validateCeoNumber } from "../utils";
 import axios from "axios";
 
@@ -27,6 +27,7 @@ const StyledText = styled.Text`
 const Signin = ({ navigation }) => {
   const { setUserInfo } = useContext(UserContext);
   const { user } = useContext(UserContext);
+  const { spinner } = useContext(ProgressContext);
 
   const insets = useSafeAreaInsets();
   const [email, setEmail] = useState("");
@@ -43,7 +44,6 @@ const Signin = ({ navigation }) => {
   const _handleCeoNumber = (email) => {
     const changedCeoNumber = removeWhitespace(email);
     setEmail(changedCeoNumber);
-    console.log(validateCeoNumber(changedCeoNumber));
     setErrorMessage(
       validateCeoNumber(changedCeoNumber) ? "" : "정확한 형식으로 입력해주세요."
     );
@@ -55,30 +55,36 @@ const Signin = ({ navigation }) => {
 
   const _handleSigninBtnPress = async () => {
     setTimeout(async () => {
-      // await axios
-      //   .post("http://opshop.shop:3000/opshop/login", {
-      //     email: `${email}`,
-      //     password: `${password}`,
-      //   })
-      //   .then((response) => {
-      //     console.log(response.data);
-      //     console.log(email);
-      //     if (response.data.result) {
-      //       const userId = response.data.result.userId;
-      //       const jwt = response.data.result.jwt;
-      //       const userEmail = email;
-      //       setUserInfo({ userId, userEmail, jwt });
-      //     } else {
-      //       alert("Error", response.data.message);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.message);
-      //     console.log(err.name);
-      //     console.log(err.stack);
-      //     alert("로그인 실패");
-      //   });
-      setUserInfo({ jwt: "111" });
+      spinner.start();
+      await axios
+        .post("http://opshop.shop:3000/opshop/login", {
+          email: `${email}`,
+          password: `${password}`,
+        })
+        .then((response) => {
+          console.log(response.data);
+          console.log(email);
+          if (response.data.result) {
+            const userId = response.data.result.userId;
+            const jwt = response.data.result.jwt;
+            const userEmail = email;
+            setUserInfo({ userId, userEmail, jwt });
+            spinner.stop();
+          } else {
+            spinner.stop();
+
+            alert("Error", response.data.message);
+          }
+        })
+        .catch((err) => {
+          console.log(err.message);
+          console.log(err.name);
+          console.log(err.stack);
+          spinner.stop();
+
+          alert("로그인 실패");
+        });
+      // setUserInfo({ jwt: "111" });
     }, 1000);
   };
 
@@ -121,6 +127,8 @@ const Signin = ({ navigation }) => {
           onChangeText={_handlePasswordChange}
           isPassword={true}
         />
+        <ErrorMessage message={errorMessage} />
+
         <Button
           title="비밀번호를 잊으셨나요?"
           onPress={() => {
