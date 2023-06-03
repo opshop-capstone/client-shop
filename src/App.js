@@ -1,5 +1,5 @@
 import { StatusBar } from "react-native";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, LogBox } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./theme";
 import Navigation from "./navigation";
@@ -12,6 +12,8 @@ import {
 } from "./contexts";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+
+LogBox.ignoreAllLogs();
 
 export default function App() {
   // const { user, setUserInfo } = useContext(UserContext);
