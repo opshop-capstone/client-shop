@@ -124,9 +124,6 @@ const AddItem = ({ route, navigation }) => {
 
   //// 어떤사람이 해결된다고 했던..
   const uploadImage = async (uri) => {
-    let date = new Date();
-    let getTime = date.getTime();
-
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -165,7 +162,7 @@ const AddItem = ({ route, navigation }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 4],
-      quality: 1,
+      quality: 0.1,
     });
 
     if (!result.canceled) {
@@ -304,14 +301,13 @@ const AddItem = ({ route, navigation }) => {
                 text: "추가",
                 onPress: async () => {
                   let list = [];
-                  photoList.map(async (a, i) => {
-                    if (i > 0) {
-                      url = await uploadImage(a.url);
-                      list.push(url);
-                    }
-                  });
-                  setUrlArray(list);
-                  await handleAdd(urlArray);
+                  console.log(photoList);
+                  for (let i = 1; i < photoList.length; i++) {
+                    const url = await uploadImage(photoList[i].url);
+                    list.push(url);
+                  }
+                  console.log(list);
+                  await handleAdd(list);
                 },
               },
             ]
