@@ -14,6 +14,7 @@ import {
   SearchPage,
   OrderDetail,
   ProductManager,
+  SubscribeShop,
 } from "../screens";
 import { IconButton, Image } from "../components";
 import Home from "./Home";
@@ -234,6 +235,22 @@ const Main = () => {
       <Stack.Screen
         name="ProductManager"
         component={ProductManager}
+        options={({ navigation }) => ({
+          title: "Main",
+          headerTitle: "상품관리",
+          headerRight: () => (
+            <Container>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
+            </Container>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="SubscribeShop"
+        component={SubscribeShop}
         options={({ navigation }) => ({
           title: "Main",
           headerTitle: "상품관리",

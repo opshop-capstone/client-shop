@@ -9,7 +9,7 @@ import {
 import { Card } from "react-native-elements";
 import styled from "styled-components";
 import { ItemContext, UserContext } from "../contexts";
-import { Button } from "../components";
+import { Button, ButtonNoFlex, ColorfulText } from "../components";
 import axios from "axios";
 
 const TotalPrice = styled.View`
@@ -29,6 +29,36 @@ const OrderHistory = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
   const [orderList, setOrderList] = useState([]);
 
+  const refresh = () => {
+    try {
+      axios({
+        method: "get",
+        url: "http://opshop.shop:3000/opshop/stores/2/ordered-list",
+        headers: {
+          "x-access-token": `${user?.jwt}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data.result;
+          if (result) {
+            setOrderList(result);
+            // console.log(result);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  };
   let sum = 0;
 
   cartItems.map((item) => {
@@ -50,7 +80,7 @@ const OrderHistory = ({ navigation, route }) => {
           const result = response.data.result;
           if (result) {
             setOrderList(result);
-            console.log(result);
+            // console.log(result);
           }
         })
         .catch(function (error) {
@@ -69,6 +99,8 @@ const OrderHistory = ({ navigation, route }) => {
   }, []);
   return (
     <View style={styles.container}>
+      <ButtonNoFlex title="새로고침" onPress={refresh} />
+
       <ScrollView>
         <View style={styles.tabContainer}>
           <TouchableOpacity
@@ -126,9 +158,7 @@ const OrderHistory = ({ navigation, route }) => {
                     >
                       <Text style={{ color: "white" }}>상세 조회</Text>
                     </TouchableOpacity>
-                    <Text style={{ color: "green", fontWeight: "bold" }}>
-                      배송 중
-                    </Text>
+                    <ColorfulText value={a.order_status} />
                   </TotalPrice>
                 </Card>
               );

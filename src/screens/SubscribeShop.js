@@ -1,234 +1,269 @@
-import React, { useState } from "react";
-import styled from "styled-components";
+import React, { useState, useContext, useEffect } from "react";
+import { ProgressContext, UserContext } from "../contexts";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  FlatList,
+  Button,
+  CustomButton,
   Image,
+  Input,
+  ShopCard,
+  Category,
+  PopularProducts,
+  ItemCard,
+} from "../components";
+import styled from "styled-components/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  FlatList,
+  ScrollView,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
 } from "react-native";
-import { ItemCard } from "../components";
+import axios from "axios";
+import { Ionicons } from "@expo/vector-icons";
 
 const Container = styled.View`
   flex: 1;
+  flex-grow: 1;
+  padding: 10px;
   background-color: ${({ theme }) => theme.background};
 `;
 
 const StyledText = styled.Text`
-  font-size: 30px;
+  font-size: 16px;
+  color: #111;
+  font-weight: 600;
+  margin-bottom: 15px;
 `;
 
-const SUBSCRIBED_STORES = [
-  { id: 1, name: "상점1", imageUrl: "https://placehold.it/150x150" },
-  { id: 2, name: "상점2", imageUrl: "https://placehold.it/150x150" },
-  { id: 3, name: "상점3", imageUrl: "https://placehold.it/150x150" },
-  { id: 4, name: "상점4", imageUrl: "https://placehold.it/150x150" },
-  { id: 5, name: "상점5", imageUrl: "https://placehold.it/150x150" },
-];
+const BoxContainer = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.background};
+`;
 
-const NEW_PRODUCTS = [
-  {
-    id: 1,
-    storeId: 1,
-    name: "상품1",
-    imageUrl: "https://placehold.it/300x150",
-  },
-  {
-    id: 2,
-    storeId: 1,
-    name: "상품2",
-    imageUrl: "https://placehold.it/300x150",
-  },
-  {
-    id: 3,
-    storeId: 2,
-    name: "상품3",
-    imageUrl: "https://placehold.it/300x150",
-  },
-  {
-    id: 4,
-    storeId: 3,
-    name: "상품4",
-    imageUrl: "https://placehold.it/300x150",
-  },
-  {
-    id: 5,
-    storeId: 4,
-    name: "상품5",
-    imageUrl: "https://placehold.it/300x150",
-  },
-  {
-    id: 6,
-    storeId: 5,
-    name: "상품6",
-    imageUrl: "https://placehold.it/300x150",
-  },
-];
+const Contour = styled.View`
+  border-bottom-width: 2px;
+  border-color: ${({ theme }) => theme.imgBackground};
+`;
 
-const SubscribeShop = () => {
-  const [showNewProducts, setShowNewProducts] = useState(true);
+const LowContainer = styled.View`
+  position: sticky;
+  margin: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ItemContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  overflow: auto;
+  flex-wrap: wrap;
+`;
+const SubscribeShop = ({ route, navigation }) => {
+  const [popularShop, setPopularShop] = useState([]);
+  const [categoryShop, setCategoryShop] = useState([]);
+  useEffect(() => {
+    try {
+      // 왜 response.data.result값이 undefined가 오는거지
+      axios
+        .get("http://opshop.shop:3000/opshop/stores")
+
+        .then(function (response) {
+          const result = response.data.result;
+          if (result) {
+            console.log(result);
+            setPopularShop(result);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  }, []);
+
+  //////////찜한 상품 로드
+  const [likedProducts, setLikedProducts] = useState([]);
+
+  const [refresh, setRefresh] = useState(1);
+
+  const { spinner } = useContext(ProgressContext);
+  const { user } = useContext(UserContext);
+  useEffect(() => {
+    axios
+      .all([
+        axios.get(`http://opshop.shop:3000/opshop/stores/6`),
+        axios.get(`http://opshop.shop:3000/opshop/stores/6/info`),
+      ])
+      .then(
+        axios.spread((response1, response2) => {
+          const result = response1.data.result;
+
+          if (result) {
+            setShopItem([...result]);
+            setShopInfo(response2.data.result);
+            console.log(result);
+            // setTestItems([...result]);
+          }
+        })
+      )
+
+      .catch((err) => console.log(err));
+  }, []);
+  ///////////////
+
+  const { setUser } = useContext(UserContext);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.subscribedStoresContainer}>
-        <FlatList
-          data={SUBSCRIBED_STORES}
-          keyExtractor={(item) => item.id.toString()}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <View style={styles.storeItemContainer}>
-              <Image
-                source={{ uri: item.imageUrl }}
-                style={styles.storeItemImage}
-              />
-              <Text style={styles.storeItemName}>{item.name}</Text>
-            </View>
-          )}
-        />
-      </View>
-      <View style={styles.tabs}>
-        <Text
-          style={[styles.tab, showNewProducts && styles.activeTab]}
-          onPress={() => setShowNewProducts(true)}
-        >
-          신상품
-        </Text>
-        <Text
-          style={[styles.tab, !showNewProducts && styles.activeTab]}
-          onPress={() => setShowNewProducts(false)}
-        >
-          찜한 상품
-        </Text>
-      </View>
+    <Container>
+      <ScrollView>
+        <Contour />
 
-      <View style={styles.newProductsContainer}>
-        <ScrollView>
-          <View style={styles.itemContainer}>
-            {showNewProducts ? (
-              <Text style={styles.newProductsTitle}>
-                구독한 매장의 신상품을 확인해보세요!
-              </Text>
-            ) : (
-              <Text style={styles.newProductsTitle}>
-                내가 찜한 상품을 확인해보세요!
-              </Text>
-            )}
-            {showNewProducts
-              ? NEW_PRODUCTS.map((product) => (
-                  <View key={product.id} style={styles.newProductItemContainer}>
-                    <Image
-                      source={{ uri: product.imageUrl }}
-                      style={styles.newProductItemImage}
-                    />
-                    <Text style={styles.newProductItemName}>
-                      {product.name}
-                    </Text>
-                  </View>
-                ))
-              : [1, 2, 3, 4, 5, 6].map((a, i) => {
-                  return (
-                    <ItemCard
-                      key={i}
-                      url="https://ifh.cc/g/M2TJZp.png"
-                      onPress={() => {
-                        navigation.navigate("Goods", { productId: i });
-                      }}
-                    />
-                  );
-                })}
+        {/* <View style={styles.card}>
+          <View style={styles.likesContainer}>
+            <Text style={styles.likesText}>{item.like_count}</Text>
           </View>
-        </ScrollView>
-      </View>
-    </View>
+          <Image
+            // source={require("../../assets/icon.png")}
+            source={{ uri: item.thumbnail }}
+            style={styles.productImage}
+          />
+          <View style={styles.detailsContainer}>
+            <Text style={styles.productName}>{item.title}</Text>
+            <Text style={styles.storeName}>{item.store_name}</Text>
+            <Text style={styles.price}>{item.price}원</Text>
+          </View>
+        </View> */}
+      </ScrollView>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    paddingTop: 16,
-    paddingHorizontal: 16,
+    paddingTop: 20,
   },
-  subscribedStoresContainer: {
-    height: 100,
-    marginBottom: 16,
+  tab: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
   },
-  storeItemContainer: {
-    alignItems: "center",
-    marginRight: 16,
+  activeTab: {
+    borderBottomWidth: 2,
+    borderBottomColor: "black",
   },
-  storeItemImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    height: 60,
-    borderRadius: 30,
-  },
-  storeItemName: {
-    marginTop: 8,
-    fontSize: 14,
+  tabText: {
+    fontSize: 16,
     fontWeight: "bold",
-    textAlign: "center",
-  },
-  newProductsContainer: {
-    flex: 1,
+    color: "black",
   },
   newProductsTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 16,
+    margin: 16,
+  },
+  itemContainer: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "lightgray",
+  },
+  itemText: {
+    fontSize: 16,
+    color: "black",
+  },
+  refreshButton: {
+    width: 30,
+    height: 30,
+    backgroundColor: "black",
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  rowItemContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    overflow: "auto",
+    flexWrap: "wrap",
+    marginVertical: 2,
+    paddingHorizontal: 20,
   },
   newProductItemContainer: {
     marginRight: 16,
     width: 150,
     height: 200,
   },
-  newProductItemImage: {
-    width: "100%",
-    height: 150,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  newProductItemName: {
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  tabs: {
+  card: {
     flexDirection: "row",
-    height: 50,
-    width: "90%",
-    marginHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
+    paddingHorizontal: 16,
+    marginHorizontal: 16,
+    paddingVertical: 5,
+    borderBottomWidth: 1,
+    borderColor: "grey",
+
+    // 그림자
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
   },
-  tab: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    color: "#d9d9d9",
-    fontSize: 18,
-  },
-  activeTab: {
-    color: "black",
-  },
-  content: {
-    flex: 1,
-  },
-  tabContent: {
-    width: "45%",
-  },
-  itemContainer: {
+  likesContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    overflow: "auto",
-    flexWrap: "wrap",
+    marginRight: 20,
+  },
+  likesText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 5,
+  },
+  styledText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    margin: 15,
+  },
+  likesIcon: {
+    width: 16,
+    height: 16,
+  },
+  productImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 8,
+    resizeMode: "contain",
+    marginBottom: 5,
+  },
+  detailsContainer: {
+    flex: 1,
+    marginLeft: 20,
+  },
+  productName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  storeName: {
+    fontSize: 14,
+    color: "gray",
+    marginBottom: 5,
+  },
+  price: {
+    fontSize: 16,
+    color: "black",
   },
 });
 

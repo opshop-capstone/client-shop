@@ -59,15 +59,12 @@ const OpMain = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => console.log(user.userEmail)}
+          onPress={() => navigation.navigate("Shop", { storeId: 6 })}
         >
           <Text style={styles.cardText}>상점 관리</Text>
           <StyledText>상점 정보를 변경 / 관리</StyledText>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => console.log("나의 후기")}
-        >
+        <TouchableOpacity style={styles.card}>
           <Text style={styles.cardText}>문의 및 후기 관리</Text>
           <StyledText>고객 상품 문의 및 후기 확인</StyledText>
         </TouchableOpacity>

@@ -92,14 +92,24 @@ const AddItem = ({ route, navigation }) => {
   };
   ///////////////
 
+  // const firebaseConfig = {
+  //   apiKey: "AIzaSyCUt0BBxLlRUHuwGgzH3B3_eeKAha90DKM",
+  //   authDomain: "op-shop-item-image.firebaseapp.com",
+  //   projectId: "op-shop-item-image",
+  //   storageBucket: "op-shop-item-image.appspot.com",
+  //   messagingSenderId: "60786360176",
+  //   appId: "1:60786360176:web:7374ab5eaf7e86ee4e19b5",
+  //   measurementId: "G-47G07C0ZVL",
+  // };
+
   const firebaseConfig = {
-    apiKey: "AIzaSyCUt0BBxLlRUHuwGgzH3B3_eeKAha90DKM",
-    authDomain: "op-shop-item-image.firebaseapp.com",
-    projectId: "op-shop-item-image",
-    storageBucket: "op-shop-item-image.appspot.com",
-    messagingSenderId: "60786360176",
-    appId: "1:60786360176:web:7374ab5eaf7e86ee4e19b5",
-    measurementId: "G-47G07C0ZVL",
+    apiKey: "AIzaSyDNIe6aOBoai33qvNubBySjrDF0lepm7To",
+    authDomain: "op-item.firebaseapp.com",
+    projectId: "op-item",
+    storageBucket: "op-item.appspot.com",
+    messagingSenderId: "943752852148",
+    appId: "1:943752852148:web:50387b3e987649ca589de1",
+    measurementId: "G-LNXMCKYQXP",
   };
 
   function random(min, max) {
@@ -113,22 +123,29 @@ const AddItem = ({ route, navigation }) => {
   const uploadImage = async (uri) => {
     setTimeout(async () => {
       console.log("00");
-      // let date = new Date();
-      var getTime = random(2, 100);
+      let date = await new Date();
+      // var getTime = random(2, 100);
       console.log("00");
 
-      // let getTime = date.getTime();
+      let getTime = await date.getTime();
 
       const response = await fetch(uri);
       const blob = await response.blob();
-      const storage = getStorage(app);
-      const storageRef = ref(storage, `images/${getTime}`);
-      // 'file' comes from the Blob or File API
-      uploadBytes(storageRef, blob).then((snapshot) => {
-        getDownloadURL(snapshot.ref).then((url) => {
-          handleAdd(url);
-        });
-      });
+      const storage = await getStorage(app);
+      const storageRef = await ref(storage, `images/${getTime}`);
+      const snapshot = await uploadBytes(storageRef, blob);
+      const url = await getDownloadURL(snapshot.ref);
+      console.log(url);
+
+      // handleAdd(url);
+
+      // 원래코드
+      // await uploadBytes(storageRef, blob).then((snapshot) => {
+      //   getDownloadURL(snapshot.ref).then((url) => {
+      //     console.log(url);
+      //     // handleAdd(url);
+      //   });
+      // });
     }, 1000);
   };
   ///////////////
@@ -283,16 +300,14 @@ const AddItem = ({ route, navigation }) => {
               {
                 text: "추가",
                 onPress: () => {
-                  // photoList.map((a, i) => {
-                  //   if (i == 1) {
-                  //     uploadImage(a.url);
-                  //     // setUrlArray([...urlArray, url]);
-                  //     console.log("추가 버튼 눌렀을때 " + url);
-                  //     handleAdd();
-                  //   }
-                  // });
-                  uploadImage(photoList[1].url);
-                  console.log("dd :" + url);
+                  photoList.map((a, i) => {
+                    if (i > 0) {
+                      uploadImage(a.url);
+                      // setUrlArray([...urlArray, url]);
+                      // console.log("추가 버튼 눌렀을때 " + url);
+                      // handleAdd();
+                    }
+                  });
                 },
               },
             ]

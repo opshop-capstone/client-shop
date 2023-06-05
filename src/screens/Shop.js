@@ -171,9 +171,8 @@ const Shop = ({ navigation, route }) => {
           tel={"tel : " + shopInfo.tel}
         />
         {/* <StoreCard /> */}
-        <Button title="구독하기" />
         <Contour />
-        <FlatList
+        {/* <FlatList
           data={category}
           keyExtractor={(item) => item.id.toString()}
           horizontal
@@ -197,11 +196,11 @@ const Shop = ({ navigation, route }) => {
               title={item.title}
             />
           )}
-        />
+        /> */}
 
         {categoryKey == 1 && (
           <View>
-            <StyledText>매장 인기 상품</StyledText>
+            <StyledText>매장 상품</StyledText>
             <ItemContainer>
               {/* <ItemCard
             onPress={() => {
