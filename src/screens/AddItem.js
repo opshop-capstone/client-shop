@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts";
+import uuid from "uuid";
 import {
   Button,
   CustomButton,
@@ -121,32 +122,31 @@ const AddItem = ({ route, navigation }) => {
 
   //// 어떤사람이 해결된다고 했던..
   const uploadImage = async (uri) => {
-    setTimeout(async () => {
-      console.log("00");
-      let date = await new Date();
-      // var getTime = random(2, 100);
-      console.log("00");
+    let date = new Date();
+    let getTime = date.getTime();
 
-      let getTime = await date.getTime();
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
+      xhr.send(null);
+    });
 
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      const storage = await getStorage(app);
-      const storageRef = await ref(storage, `images/${getTime}`);
-      const snapshot = await uploadBytes(storageRef, blob);
-      const url = await getDownloadURL(snapshot.ref);
-      console.log(url);
+    const fileRef = ref(getStorage(), uuid.v4());
+    const result = await uploadBytes(fileRef, blob);
 
-      // handleAdd(url);
+    // We're done with the blob, close and release it
+    blob.close();
 
-      // 원래코드
-      // await uploadBytes(storageRef, blob).then((snapshot) => {
-      //   getDownloadURL(snapshot.ref).then((url) => {
-      //     console.log(url);
-      //     // handleAdd(url);
-      //   });
-      // });
-    }, 1000);
+    const url = await getDownloadURL(fileRef);
+    console.log(url);
   };
   ///////////////
 
@@ -300,12 +300,11 @@ const AddItem = ({ route, navigation }) => {
               {
                 text: "추가",
                 onPress: () => {
-                  photoList.map((a, i) => {
+                  photoList.map(async (a, i) => {
                     if (i > 0) {
-                      uploadImage(a.url);
-                      // setUrlArray([...urlArray, url]);
-                      // console.log("추가 버튼 눌렀을때 " + url);
-                      // handleAdd();
+                      await uploadImage(a.url);
+
+                      console.log("추가 버튼 눌렀을때 " + a.url);
                     }
                   });
                 },
