@@ -60,6 +60,8 @@ const AddItem = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
 
   const handleAdd = async (imageUrl) => {
+    console.log(imageUrl);
+    const detail_images = imageUrl.slice(0).join(",");
     await axios({
       method: "post",
       url: "http://opshop.shop:3000/opshop/stores/6/product-register",
@@ -72,8 +74,8 @@ const AddItem = ({ route, navigation }) => {
         content: content,
         categoryId: 1,
         size: size,
-        thumbnail_image_url: imageUrl,
-        product_image_url: "https://ifh.cc/g/M2TJZp.png",
+        thumbnail_image_url: imageUrl[0],
+        product_image_url: detail_images,
       },
     })
       .then((response) => {
@@ -147,6 +149,7 @@ const AddItem = ({ route, navigation }) => {
 
     const url = await getDownloadURL(fileRef);
     console.log(url);
+    return url;
   };
   ///////////////
 
@@ -299,14 +302,16 @@ const AddItem = ({ route, navigation }) => {
               },
               {
                 text: "추가",
-                onPress: () => {
+                onPress: async () => {
+                  let list = [];
                   photoList.map(async (a, i) => {
                     if (i > 0) {
-                      await uploadImage(a.url);
-
-                      console.log("추가 버튼 눌렀을때 " + a.url);
+                      url = await uploadImage(a.url);
+                      list.push(url);
                     }
                   });
+                  setUrlArray(list);
+                  await handleAdd(urlArray);
                 },
               },
             ]
