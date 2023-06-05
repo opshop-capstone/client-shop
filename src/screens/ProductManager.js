@@ -31,14 +31,14 @@ const ProductManager = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("SubscribeShop")}
+          onPress={() => navigation.navigate("EditItem")}
         >
           <Text style={styles.cardText}>상품 수정</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("SubscribeShop")}
+          onPress={() => navigation.navigate("DeleteItem")}
         >
           <Text style={styles.cardText}>상품 삭제</Text>
         </TouchableOpacity>

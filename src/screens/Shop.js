@@ -219,7 +219,7 @@ const Shop = ({ navigation, route }) => {
                     url={a.product_thumbnail}
                     productTitle={a.title}
                     shopName="VINTAGE TALK"
-                    price="39,000원"
+                    price={a.price}
                   />
                 );
               })}

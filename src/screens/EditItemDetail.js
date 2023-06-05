@@ -53,7 +53,9 @@ const LowContainer = styled.View`
   justify-content: space-between;
   align-items: center;
 `;
-const AddItem = ({ route, navigation }) => {
+const EditItemDetail = ({ route, navigation }) => {
+  const productId = route.params.productId;
+
   const [url, setUrl] = useState("");
   const [urlArray, setUrlArray] = useState([]);
   const [photoList, setPhotoList] = useState([1]);
@@ -347,4 +349,4 @@ const AddItem = ({ route, navigation }) => {
   );
 };
 
-export default AddItem;
+export default EditItemDetail;

@@ -3,7 +3,6 @@ import { ProgressContext, UserContext } from "../contexts";
 import {
   Button,
   CustomButton,
-  Image,
   Input,
   ShopCard,
   Category,
@@ -19,6 +18,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
+  Image,
 } from "react-native";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
@@ -62,20 +62,20 @@ const ItemContainer = styled.View`
   overflow: auto;
   flex-wrap: wrap;
 `;
-const SubscribeShop = ({ route, navigation }) => {
-  const [popularShop, setPopularShop] = useState([]);
-  const [categoryShop, setCategoryShop] = useState([]);
+const EditItem = ({ route, navigation }) => {
+  const { user } = useContext(UserContext);
+  const [shopItem, setShopItem] = useState([]);
+  const [deleteItem, setDeleteItem] = useState(true);
   useEffect(() => {
     try {
       // 왜 response.data.result값이 undefined가 오는거지
       axios
-        .get("http://opshop.shop:3000/opshop/stores")
+        .get("http://opshop.shop:3000/opshop/stores/6")
 
         .then(function (response) {
           const result = response.data.result;
           if (result) {
-            console.log(result);
-            setPopularShop(result);
+            setShopItem(result);
           }
         })
         .catch(function (error) {
@@ -91,60 +91,87 @@ const SubscribeShop = ({ route, navigation }) => {
         isMount = false;
       };
     }
-  }, []);
+  }, [deleteItem]);
 
+  // 상품 삭제 요청
+
+  const handleDelete = async (productId) => {
+    await axios({
+      method: "post",
+      url: `http://opshop.shop:3000/opshop/stores/6/product-delete/${productId}`,
+      headers: {
+        "x-access-token": `${user?.jwt}`,
+      },
+    })
+      .then((response) => {
+        if (response) {
+          setDeleteItem(!deleteItem);
+        } else {
+          alert("Error", response.data.message);
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        console.log(err.name);
+        console.log(err.stack);
+
+        alert("주문하기 실패");
+      });
+  };
   //////////찜한 상품 로드
   const [likedProducts, setLikedProducts] = useState([]);
 
   const [refresh, setRefresh] = useState(1);
 
   const { spinner } = useContext(ProgressContext);
-  const { user } = useContext(UserContext);
-  useEffect(() => {
-    axios
-      .all([
-        axios.get(`http://opshop.shop:3000/opshop/stores/6`),
-        axios.get(`http://opshop.shop:3000/opshop/stores/6/info`),
-      ])
-      .then(
-        axios.spread((response1, response2) => {
-          const result = response1.data.result;
 
-          if (result) {
-            setShopItem([...result]);
-            setShopInfo(response2.data.result);
-            console.log(result);
-            // setTestItems([...result]);
-          }
-        })
-      )
-
-      .catch((err) => console.log(err));
-  }, []);
   ///////////////
-
-  const { setUser } = useContext(UserContext);
 
   return (
     <Container>
       <ScrollView>
         <Contour />
 
-        {/* <View style={styles.card}>
-          <View style={styles.likesContainer}>
-            <Text style={styles.likesText}>{item.like_count}</Text>
-          </View>
-          <Image
-            // source={require("../../assets/icon.png")}
-            source={{ uri: item.thumbnail }}
-            style={styles.productImage}
-          />
-          <View style={styles.detailsContainer}>
-            <Text style={styles.productName}>{item.title}</Text>
-            <Text style={styles.storeName}>{item.store_name}</Text>
-            <Text style={styles.price}>{item.price}원</Text>
-          </View>
-        </View> */}
+        {shopItem.map((item, i) => {
+          return (
+            <View style={styles.card}>
+              <View style={styles.likesContainer}>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    navigation.navigate("EditItemDetail", {
+                      productId: item.product_id,
+                    })
+                  }
+                >
+                  <Text style={styles.buttonText}>상품 수정</Text>
+                </TouchableOpacity>
+              </View>
+              <Image
+                Image // source={require("../../assets/icon.png")}
+                source={{ uri: item.product_thumbnail }}
+                style={styles.productImage}
+              />
+              <View style={styles.detailsContainer}>
+                <Text style={styles.productName}>{item.title}</Text>
+                <Text style={styles.price}>{item.price}원</Text>
+              </View>
+            </View>
+          );
+        })}
+        {/* {shopItem.map((a, i) => {
+          return (
+            <ItemCard
+              key={i}
+              onPress={() => {
+                navigation.navigate("Goods", { productId: a.product_id });
+              }}
+              url={a.product_thumbnail}
+              productTitle={a.title}
+              price={a.price.toLocaleString() + "원"}
+            />
+          );
+        })} */}
       </ScrollView>
     </Container>
   );
@@ -244,7 +271,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 8,
-    resizeMode: "contain",
+    resizeMode: "cover",
     marginBottom: 5,
   },
   detailsContainer: {
@@ -265,6 +292,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "black",
   },
+  button: {
+    backgroundColor: "black",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
 });
 
-export default SubscribeShop;
+export default EditItem;

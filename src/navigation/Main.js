@@ -14,7 +14,9 @@ import {
   SearchPage,
   OrderDetail,
   ProductManager,
-  SubscribeShop,
+  DeleteItem,
+  EditItem,
+  EditItemDetail,
 } from "../screens";
 import { IconButton, Image } from "../components";
 import Home from "./Home";
@@ -249,11 +251,43 @@ const Main = () => {
         })}
       />
       <Stack.Screen
-        name="SubscribeShop"
-        component={SubscribeShop}
+        name="DeleteItem"
+        component={DeleteItem}
         options={({ navigation }) => ({
           title: "Main",
-          headerTitle: "상품관리",
+          headerTitle: "상품 제거",
+          headerRight: () => (
+            <Container>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
+            </Container>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="EditItem"
+        component={EditItem}
+        options={({ navigation }) => ({
+          title: "Main",
+          headerTitle: "상품 수정",
+          headerRight: () => (
+            <Container>
+              <Fontisto name="shopping-store" size={20} color="black" />
+              <StyledText style={{ marginLeft: 10 }}>
+                판매자용 서비스
+              </StyledText>
+            </Container>
+          ),
+        })}
+      />
+      <Stack.Screen
+        name="EditItemDetail"
+        component={EditItemDetail}
+        options={({ navigation }) => ({
+          title: "Main",
+          headerTitle: "상품 수정",
           headerRight: () => (
             <Container>
               <Fontisto name="shopping-store" size={20} color="black" />

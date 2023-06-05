@@ -3,7 +3,7 @@ import Signup from "./Signup";
 import PwFind from "./PwFind";
 import Profile from "./Profile";
 import OpMain from "./OpMain";
-import SubscribeShop from "./SubscribeShop";
+import DeleteItem from "./DeleteItem";
 import Cart from "./Cart";
 import AddItem from "./AddItem";
 import Shop from "./Shop";
@@ -14,6 +14,8 @@ import EditAddress from "./EditAddress";
 import SearchPage from "./SearchPage";
 import OrderDetail from "./OrderDetail";
 import ProductManager from "./ProductManager";
+import EditItem from "./EditItem";
+import EditItemDetail from "./EditItemDetail";
 
 export {
   Signin,
@@ -21,7 +23,7 @@ export {
   PwFind,
   Profile,
   OpMain,
-  SubscribeShop,
+  DeleteItem,
   Cart,
   AddItem,
   Shop,
@@ -32,4 +34,6 @@ export {
   SearchPage,
   OrderDetail,
   ProductManager,
+  EditItem,
+  EditItemDetail,
 };
