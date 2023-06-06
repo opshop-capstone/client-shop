@@ -60,6 +60,8 @@ const AddItem = ({ route, navigation }) => {
   const { user } = useContext(UserContext);
 
   const handleAdd = async (imageUrl) => {
+    console.log(imageUrl);
+    const detail_images = imageUrl.slice(0).join(",");
     await axios({
       method: "post",
       url: "http://opshop.shop:3000/opshop/stores/6/product-register",
@@ -72,8 +74,8 @@ const AddItem = ({ route, navigation }) => {
         content: content,
         categoryId: 1,
         size: size,
-        thumbnail_image_url: imageUrl,
-        product_image_url: "https://ifh.cc/g/M2TJZp.png",
+        thumbnail_image_url: imageUrl[0],
+        product_image_url: detail_images,
       },
     })
       .then((response) => {
@@ -122,9 +124,6 @@ const AddItem = ({ route, navigation }) => {
 
   //// 어떤사람이 해결된다고 했던..
   const uploadImage = async (uri) => {
-    let date = new Date();
-    let getTime = date.getTime();
-
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function () {
@@ -147,32 +146,7 @@ const AddItem = ({ route, navigation }) => {
 
     const url = await getDownloadURL(fileRef);
     console.log(url);
-    // setTimeout(async () => {
-    //   console.log("00");
-    //   let date = await new Date();
-    //   // var getTime = random(2, 100);
-    //   console.log("00");
-
-    //   let getTime = await date.getTime();
-
-    //   const response = await fetch(uri);
-    //   const blob = await response.blob();
-    //   const storage = await getStorage(app);
-    //   const storageRef = await ref(storage, `images/${getTime}`);
-    //   const snapshot = await uploadBytes(storageRef, blob);
-    //   const url = await getDownloadURL(snapshot.ref);
-    //   console.log(url);
-
-    //   // handleAdd(url);
-
-    //   // 원래코드
-    //   // await uploadBytes(storageRef, blob).then((snapshot) => {
-    //   //   getDownloadURL(snapshot.ref).then((url) => {
-    //   //     console.log(url);
-    //   //     // handleAdd(url);
-    //   //   });
-    //   // });
-    // }, 1000);
+    return url;
   };
   ///////////////
 
@@ -188,7 +162,7 @@ const AddItem = ({ route, navigation }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 4],
-      quality: 1,
+      quality: 0.025,
     });
 
     if (!result.canceled) {
@@ -325,18 +299,15 @@ const AddItem = ({ route, navigation }) => {
               },
               {
                 text: "추가",
-                onPress: () => {
-                  photoList.map(async (a, i) => {
-                    if (i > 0) {
-                      await uploadImage(a.url);
-
-                      console.log("추가 버튼 눌렀을때 " + a.url);
-                      // uploadImage(a.url);
-                      // setUrlArray([...urlArray, url]);
-                      // console.log("추가 버튼 눌렀을때 " + url);
-                      // handleAdd();
-                    }
-                  });
+                onPress: async () => {
+                  let list = [];
+                  console.log(photoList);
+                  for (let i = 1; i < photoList.length; i++) {
+                    const url = await uploadImage(photoList[i].url);
+                    list.push(url);
+                  }
+                  console.log(list);
+                  await handleAdd(list);
                 },
               },
             ]

@@ -75,6 +75,7 @@ const EditItem = ({ route, navigation }) => {
         .then(function (response) {
           const result = response.data.result;
           if (result) {
+            console.log("상품수정 페이지 " + result);
             setShopItem(result);
           }
         })
@@ -91,7 +92,7 @@ const EditItem = ({ route, navigation }) => {
         isMount = false;
       };
     }
-  }, [deleteItem]);
+  }, []);
 
   // 상품 삭제 요청
 

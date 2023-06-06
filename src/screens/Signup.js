@@ -4,6 +4,8 @@ import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { UserContext } from "../contexts";
+import { Alert } from "react-native";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
@@ -51,23 +53,27 @@ const Signup = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [shopName, setShopName] = useState("");
   const refPassword = useRef(null);
 
-  const _handleSignupBtnPress = async ({ email, password, name }) => {
+  const _handleSignupBtnPress = async () => {
+    // { email, password, name } 원래 파라미터에 들어가 있던거
     setTimeout(async () => {
       console.log(email, password, name);
       await axios
-        .post("http://opshop.shop", {
-          identification: `${email}`,
+        .post("http://opshop.shop:3000/opshop/join", {
+          email: `${email}`,
           password: `${password}`,
-          name: `${name}`,
+          nickname: `${name}`,
+          type: "OWNER",
         })
         .then((response) => {
+          console.log(response.data);
           if (response.data.isSuccess != true) {
             Alert.alert("오류", response.data.message);
           } else {
             Alert.alert("가입이 완료되었습니다.");
-            navigation.navigate("Login");
+            navigation.navigate("로그인");
           }
         })
         .catch((err) => {
@@ -76,9 +82,7 @@ const Signup = ({ navigation }) => {
         });
     }, 2000);
   };
-  // const _handleSignupBtnPress = () => {
-  //   console.log("회원가입");
-  // };
+
   return (
     <KeyboardAwareScrollView extraScrollHeight={20}>
       <Container insets={insets}>
@@ -125,15 +129,14 @@ const Signup = ({ navigation }) => {
           isPassword={true}
         />
         <Input
-          label="휴대폰번호"
-          placeholder="'-'는 제외하고 입력하세요."
-          returnKeyType="next"
-          value={password}
-          onChangeText={setPassword}
-          isPassword={true}
+          label="상점명"
+          placeholder="상점명을 입력하세요"
+          returnKeyType="done"
+          value={shopName}
+          onChangeText={setShopName}
         />
 
-        <Button title="회원가입" onPress={_handleSignupBtnPress()} />
+        <Button title="회원가입" onPress={_handleSignupBtnPress} />
       </Container>
     </KeyboardAwareScrollView>
   );

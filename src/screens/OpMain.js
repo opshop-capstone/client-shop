@@ -59,7 +59,7 @@ const OpMain = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("Shop", { storeId: 6 })}
+          onPress={() => navigation.navigate("Shop", { storeId: 2 })}
         >
           <Text style={styles.cardText}>상점 관리</Text>
           <StyledText>상점 정보를 변경 / 관리</StyledText>

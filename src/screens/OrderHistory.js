@@ -42,7 +42,8 @@ const OrderHistory = ({ navigation, route }) => {
           const result = response.data.result;
           if (result) {
             setOrderList(result);
-            // console.log(result);
+            console.log("result");
+            console.log(result);
           }
         })
         .catch(function (error) {
