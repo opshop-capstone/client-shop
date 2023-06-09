@@ -140,8 +140,8 @@ const Shop = ({ navigation, route }) => {
 
           if (result) {
             setShopItem([...result]);
-            setShopInfo(response2.data.result);
-            console.log(result);
+            setShopInfo(response2.data.result[0]);
+            console.log(response2.data.result);
             // setTestItems([...result]);
           }
         })
@@ -158,7 +158,7 @@ const Shop = ({ navigation, route }) => {
           onPress={() => {
             console.log("Navigating detail page");
           }}
-          image={store_image_url}
+          image={shopInfo.store_thumbnail}
           title={shopInfo.store_name}
           description={
             shopInfo.zipcode +

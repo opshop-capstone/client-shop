@@ -1,9 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts";
 import { Button, Input } from "../components";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import axios from "axios";
 
 const Container = styled.View`
   flex: 1;
@@ -28,17 +29,70 @@ const ItemContainer = styled.View`
 `;
 const OpMain = ({ navigation }) => {
   const { user, setUserInfo } = useContext(UserContext);
+  const [shopInfo, setShopInfo] = useState([]);
+  const [shopId, setShopId] = useState(true);
+  const shopProfile = (id) => {
+    try {
+      axios({
+        method: "get",
+        url: `http://opshop.shop:3000/opshop/stores/${id}/info`,
+        headers: {
+          "x-access-token": `${user?.jwt}`,
+        },
+      })
+        .then(function (response) {
+          const result = response.data.result;
+          if (result) {
+            setShopInfo(result[0]);
+            console.log(result);
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          console.log("error");
+          alert(error);
+        });
+    } catch (e) {
+      console.log(e);
+      alert(e);
+    } finally {
+      return () => {
+        isMount = false;
+      };
+    }
+  };
   return (
     <Container>
+      <ItemContainer>
+        <TouchableOpacity
+          style={[styles.button, shopId && styles.activeButton]}
+          onPress={() => {
+            setShopId(true);
+            shopProfile(6);
+          }}
+        >
+          <Text style={styles.buttonText}>SUGANG_VINTAGE</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, !shopId && styles.activeButton]}
+          onPress={() => {
+            setShopId(false);
+            shopProfile(2);
+          }}
+        >
+          <Text style={styles.buttonText}>VINTAGE TALK</Text>
+        </TouchableOpacity>
+      </ItemContainer>
+
       <View style={styles.header}>
         <View style={styles.profile}>
           <Image
-            source={require("../../assets/icon.png")}
+            source={{ uri: shopInfo.store_thumbnail }}
             style={styles.profileImg}
           />
         </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.name}>TEST SHOP</Text>
+          <Text style={styles.name}>{shopInfo.store_name}</Text>
           <Text style={styles.email}>{user.userEmail}</Text>
         </View>
       </View>
@@ -59,7 +113,7 @@ const OpMain = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => navigation.navigate("Shop", { storeId: 2 })}
+          onPress={() => navigation.navigate("Shop", { storeId: 6 })}
         >
           <Text style={styles.cardText}>상점 관리</Text>
           <StyledText>상점 정보를 변경 / 관리</StyledText>
@@ -136,6 +190,22 @@ const styles = StyleSheet.create({
   },
   cardText: {
     fontSize: 16,
+    fontWeight: "bold",
+  },
+  activeButton: {
+    backgroundColor: "black",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  button: {
+    backgroundColor: "gray",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  buttonText: {
+    color: "white",
     fontWeight: "bold",
   },
 });

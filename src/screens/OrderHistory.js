@@ -100,8 +100,6 @@ const OrderHistory = ({ navigation, route }) => {
   }, []);
   return (
     <View style={styles.container}>
-      <ButtonNoFlex title="새로고침" onPress={refresh} />
-
       <ScrollView>
         <View style={styles.tabContainer}>
           <TouchableOpacity
@@ -109,7 +107,10 @@ const OrderHistory = ({ navigation, route }) => {
               styles.tab,
               activeTab === "orderHistory" && styles.activeTab,
             ]}
-            onPress={() => handleTabChange("orderHistory")}
+            onPress={() => {
+              refresh();
+              handleTabChange("orderHistory");
+            }}
           >
             <Text style={styles.tabText}>주문 내역</Text>
           </TouchableOpacity>

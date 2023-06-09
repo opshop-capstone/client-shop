@@ -81,6 +81,7 @@ const AddItem = ({ route, navigation }) => {
       .then((response) => {
         if (response) {
           console.log(response.data);
+          alert(`${response.data.message}`);
         } else {
           alert("Error", response.data.message);
         }
@@ -274,14 +275,14 @@ const AddItem = ({ route, navigation }) => {
           style={{ height: 200 }}
         />
       </ScrollView>
-      <Button
+      {/* <Button
         title="test"
         onPress={() => {
           console.log(photoList);
 
           console.log("url 결과값 : " + url);
         }}
-      />
+      /> */}
       <Button
         title="상품 추가하기"
         onPress={() => {
@@ -308,6 +309,7 @@ const AddItem = ({ route, navigation }) => {
                   }
                   console.log(list);
                   await handleAdd(list);
+                  await navigation.navigate("ProductManager");
                 },
               },
             ]

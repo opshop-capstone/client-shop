@@ -162,55 +162,7 @@ const Goods = ({ route, product, navigation }) => {
         <Image source={{ uri: `${detailCutUrl}` }} style={styles.detailCut} />
       </ScrollView>
 
-      <LowContainer>
-        <CustomButton
-          iconName="heart"
-          title="찜하기"
-          onPress={() => {
-            alert("상품이 찜한 상품에 추가되었어요!");
-          }}
-          containerStyle={{
-            width: 60, // 원하는 크기로 지정
-            height: 60,
-            borderRadius: 8,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#111",
-          }}
-        />
-        <ButtonNoFlex
-          containerStyle={{
-            width: 290,
-            borderRadius: 8,
-            backgroundColor: "#111",
-            height: 60,
-            marginLeft: 10,
-          }}
-          onPress={() => {
-            let duplication = cartItems.findIndex((a) => {
-              console.log(a);
-              return a.name == title;
-            });
-            const addToCart = () => {
-              setCartItems([
-                ...cartItems,
-                {
-                  id: cartItems.length + 1,
-                  name: title,
-                  price: `${productPrice}`,
-                  image: `${imageUrl}`,
-                },
-              ]);
-              handleAddToCart();
-              AddToCartHandler();
-            };
-            duplication == -1
-              ? addToCart()
-              : alert("장바구니에 같은 상품이 존재해요!");
-          }}
-          title="장바구니에 담기"
-        />
-      </LowContainer>
+      <LowContainer></LowContainer>
       <Modal visible={showModal} animationType="slide">
         <View style={styles.modalContainer}>
           <StyledText>장바구니에 </StyledText>

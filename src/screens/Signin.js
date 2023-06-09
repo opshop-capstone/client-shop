@@ -109,8 +109,8 @@ const Signin = ({ navigation }) => {
         </StyledText>
         <StyledText>사업자 로그인</StyledText>
         <Input
-          label="사업자 번호"
-          placeholder="사업자 번호 10자리를 '-' 없이 입력해주세요"
+          label="이메일"
+          placeholder="aaaa@email.com"
           returnKeyType="next"
           value={email}
           onChangeText={_handleCeoNumber}
